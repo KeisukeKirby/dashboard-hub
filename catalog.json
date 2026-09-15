@@ -1,0 +1,272 @@
+{
+  "githubOwner": "KeisukeKirby",
+  "watchScopes": ["barefootinc-th"],
+  "ignore": ["KeisukeKirby/dashboard-hub"],
+  "areas": [
+    { "id": "sales", "label": "販売・売上" },
+    { "id": "work", "label": "タスク・記録" },
+    { "id": "store", "label": "店舗・売場" },
+    { "id": "brand", "label": "ブランド・集客" },
+    { "id": "other", "label": "レポート・その他" }
+  ],
+  "kinds": {
+    "dashboard": "ダッシュボード",
+    "app": "アプリ",
+    "lp": "LP",
+    "3d": "3D",
+    "map": "平面図",
+    "report": "レポート"
+  },
+  "items": [
+    {
+      "id": "sales-h1-2026",
+      "name": "販売実績ダッシュボード 2026年上期",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "タイの全店舗・オンライン・イベント・委託の売上金額と点数を1〜6月で集計。VFF シューズの足数、ブランド構成、モデル別ランキング。日英切替。",
+      "url": "https://sales-1st-half-26-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/sales-1st-half-26-dashboard",
+      "repo": "KeisukeKirby/sales-1st-half-26-dashboard"
+    },
+    {
+      "id": "my-sales",
+      "name": "Barefoot Malaysia 販売実績",
+      "area": "sales", "kind": "dashboard", "country": ["MY"],
+      "summary": "Johor Bahru 店の開業(7/17)以降を週次・月次で集計。店舗 POS と Shopee・Lazada・直販を分け、未入金は台帳で別管理。",
+      "url": "https://barefoot-my-sales-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/barefoot-my-sales-dashboard",
+      "repo": "KeisukeKirby/barefoot-my-sales-dashboard"
+    },
+    {
+      "id": "my-sales-artifact",
+      "name": "Barefoot Malaysia 販売実績(Artifact 版)",
+      "area": "sales", "kind": "dashboard", "country": ["MY"],
+      "summary": "同名の Vercel 版とは別に置いている Artifact。日次・曜日と時間帯・サイズとカラー・注文明細までタブで見られる。",
+      "url": "https://claude.ai/artifact/2cW3VBzYxRDjygcQ6myRhE",
+      "host": "artifact", "updated": "2026-09-14"
+    },
+    {
+      "id": "sales-h1-artifact",
+      "name": "販売実績ダッシュボード 2026年上期(Artifact 版)",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "上期(1〜6月)ダッシュボードの Artifact 版。タブ構成は Vercel 版と同じ。",
+      "url": "https://claude.ai/artifact/B6bLaDksDWrfnqKyGtEX63",
+      "host": "artifact", "updated": "2026-08-18",
+      "flag": "8/18 から更新なし。Vercel 版にはその後、Siam Discovery の計上方法の修正や税抜表示への切替が入っているので、数字は Vercel 版を正とする"
+    },
+    {
+      "id": "bls-2026",
+      "name": "VFF 出展売上 Baan Lae Suan Fair 2026",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "BITEC Bangna の Baan Lae Suan Fair(7/31〜8/9)に出展した期間の売上記録。",
+      "url": "https://sales-record-baanlaesuan.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/sales-record-baanlaesuan",
+      "repo": "KeisukeKirby/sales-record-baanlaesuan"
+    },
+    {
+      "id": "vft-csv",
+      "name": "Vibram FiveFingers Thailand Sales",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "CSV を画面で読み込むと、月次売上・店舗別・商品 Top 10 を表示する分析ツール。データは同梱していない。",
+      "url": "https://vibram-thailand-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/vft-sales-analysis",
+      "repo": "KeisukeKirby/vibram-thailand-dashboard"
+    },
+    {
+      "id": "zort",
+      "name": "zort-dashboard",
+      "area": "sales", "kind": "dashboard", "country": [],
+      "summary": "Basic 認証(Secure Dashboard)付きの Next.js アプリ。中身は外から確認できていない。名前から ZORT の受注・在庫データと推定。",
+      "url": "https://zort-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/zort-dashboard"
+    },
+
+    {
+      "id": "tasks",
+      "name": "K.HoshinoTasks",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "個人のタスク・プロジェクト・カンバンを一元管理。サーバーの API に保存し、管理者モードで編集する。",
+      "url": "https://task-managememt.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/personal-task-managememt",
+      "repo": "KeisukeKirby/task-managememt"
+    },
+    {
+      "id": "projecthub",
+      "name": "ProjectHub",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "複数プロジェクトの進捗管理。締切からの逆算スケジュール、ガント、カンバン、リードタイム分析。",
+      "url": "https://project-task-delta.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/team-task-management",
+      "repo": "KeisukeKirby/project-task"
+    },
+    {
+      "id": "my-log",
+      "name": "My Log",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "予定・タスクと、ランニング・筋トレ・語学・読書・睡眠などの積み上げを記録。データはブラウザ内だけに保存。",
+      "url": "https://my-log-topaz.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/my-log",
+      "repo": "KeisukeKirby/my-log"
+    },
+    {
+      "id": "personal-dashboard",
+      "name": "My Dashboard",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "目標ボード、習慣トラッカー、人生カウントダウン、旅行リスト。Supabase に保存。",
+      "url": "https://personal-dashboard-kappa-eight.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/personal-dashboard",
+      "repo": "KeisukeKirby/personal-dashboard"
+    },
+    {
+      "id": "lingodash",
+      "name": "LingoDash",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "語学学習の記録。復習カード、1日の目標時間、XP、学習ヒートマップ。データはブラウザ内に保存。GitHub のリポジトリは KeisukeKirby 配下に見当たらない。",
+      "url": "https://lingodash-eta.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/lingodash"
+    },
+
+    {
+      "id": "kv-after",
+      "name": "K Village 改装後3Dイメージ",
+      "area": "store", "kind": "3d", "country": ["TH"],
+      "summary": "K Village 店の改装後の売場イメージを3Dで表示。",
+      "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x",
+      "host": "artifact", "updated": "2026-09-11"
+    },
+    {
+      "id": "kv-texture",
+      "name": "K Village 実写3Dレイアウト",
+      "area": "store", "kind": "3d", "country": ["TH"],
+      "summary": "店内写真を壁ごとに遠近補正して貼った、現状の売場の実写テクスチャ3D。",
+      "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb",
+      "host": "artifact", "updated": "2026-09-07"
+    },
+    {
+      "id": "kv-photo-matched",
+      "name": "K Village 3Dレイアウト(写真ベース)",
+      "area": "store", "kind": "3d", "country": ["TH"],
+      "summary": "店内写真12枚から起こし直し、改装前モデルとの差分10件を注記した版。日英切替。",
+      "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi",
+      "host": "artifact", "updated": "2026-09-07"
+    },
+    {
+      "id": "kv-before",
+      "name": "K Village 3Dレイアウト(改装前)",
+      "area": "store", "kind": "3d", "country": ["TH"],
+      "summary": "改装前の売場を什器単位で3D化したモデル。",
+      "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3",
+      "host": "artifact", "updated": "2026-09-07"
+    },
+    {
+      "id": "store-3d-en",
+      "name": "Barefoot Store 3D Layout",
+      "area": "store", "kind": "3d", "country": ["TH"],
+      "summary": "店内写真9枚から起こした最初の3Dレイアウト(英語)。売場 5.2 × 11.5 m、ゾーン別の什器と推定寸法。",
+      "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484",
+      "host": "artifact", "updated": "2026-08-31"
+    },
+    {
+      "id": "photo-map",
+      "name": "ベアフット店舗フォトマップ",
+      "area": "store", "kind": "map", "country": ["TH"],
+      "summary": "3Dレイアウトと同じ平面に、撮影位置9か所と向きを記入。写真を読み込むと平面と実写を並べて見られる(写真は端末内だけに保存)。",
+      "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou",
+      "host": "artifact", "updated": "2026-08-31"
+    },
+
+    {
+      "id": "t21-lp",
+      "name": "Terminal 21 Asok イベント LP",
+      "area": "brand", "kind": "lp", "country": ["TH"],
+      "summary": "24th Absolute The Festival of Movement(9/15〜10/4、Terminal 21 Asok G階)の VFF × Vivobarefoot 出展 LP。英語・タイ語。",
+      "url": "https://terminal21-asok-lp.vercel.app",
+      "host": "vercel", "vercel": "shima-s-projects2/terminal21-asok-lp",
+      "repo": "shimadatatsuki-netizen/terminal21-asok-lp"
+    },
+    {
+      "id": "t21-lp-old",
+      "name": "Terminal 21 Asok イベント LP(旧 URL)",
+      "area": "brand", "kind": "lp", "country": ["TH"],
+      "summary": "9/9 に先方の Vercel へ移す前の LP。移管後の修正は反映されない。",
+      "flag": "会期中(9/15〜10/4)も旧 URL が公開されたまま。告知物やリンクに旧 URL が残っていないか確認",
+      "url": "https://barefootinc-t21-asok-event.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/barefootinc-t21-asok-event",
+      "repo": "KeisukeKirby/barefootinc-t21-asok-event",
+      "links": [{ "label": "現行の LP", "url": "https://terminal21-asok-lp.vercel.app" }]
+    },
+    {
+      "id": "vivo-lp",
+      "name": "Vivobarefoot Thailand LP",
+      "area": "brand", "kind": "lp", "country": ["TH"],
+      "summary": "K Village 旗艦店での Vivobarefoot 取り扱い開始を告知する LP。",
+      "url": "https://vivobarefoot-lp.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/vivobarefoot-lp",
+      "repo": "KeisukeKirby/vivobarefoot-lp"
+    },
+    {
+      "id": "my-store-lp",
+      "name": "VFF Malaysia 店舗案内",
+      "area": "brand", "kind": "lp", "country": ["MY"],
+      "summary": "Johor Bahru(Taman Pelangi)の VFF 旗艦店の案内ページ。",
+      "url": "https://barefoot-store-guidance-my.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/malaysia-landing-page",
+      "repo": "KeisukeKirby/barefoot-store-guidance-my"
+    },
+    {
+      "id": "artwork-check",
+      "name": "Vibram Brand Compliance Dashboard",
+      "area": "brand", "kind": "app", "country": ["TH"],
+      "summary": "Vibram 製品のアートワークをブランド基準でチェックし、承認するためのダッシュボード。",
+      "url": "https://vibram-hq-artwork-check.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/vibram-hq-artwork-check",
+      "repo": "KeisukeKirby/vibram-hq-artwork-check"
+    },
+
+    {
+      "id": "kl-trip",
+      "name": "クアラルンプール出張報告",
+      "area": "other", "kind": "report", "country": ["MY"],
+      "summary": "クアラルンプール出張の報告書。日本語版と英語版の2本。",
+      "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2",
+      "host": "artifact", "updated": "2026-08-31",
+      "links": [{ "label": "English 版", "url": "https://claude.ai/artifact/16w3H5WaEvYoRVPCyHYP6C" }]
+    },
+    {
+      "id": "currency",
+      "name": "Currency Rate Dashboard",
+      "area": "other", "kind": "dashboard", "country": [],
+      "summary": "為替レートの一覧。ExchangeRate-API の最新値と、欧州中央銀行(Frankfurter 経由)の履歴チャート・日付比較。",
+      "url": "https://currency-dashboard-six.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/currency-dashboard",
+      "repo": "KeisukeKirby/currency-dashboard"
+    },
+
+    {
+      "id": "vibram-dashboard", "archived": true, "name": "vibram-dashboard",
+      "summary": "Next.js の初期テンプレートのまま。Vercel プロジェクトは削除済み。",
+      "url": "https://vibram-dashboard.vercel.app", "repo": "KeisukeKirby/vibram-dashboard"
+    },
+    {
+      "id": "vibram-hq-dashboard", "archived": true, "name": "vibram-hq-dashboard",
+      "summary": "Vibram HQ がタイの販促物を承認する画面の試作。Brand Compliance Dashboard の前身と推定。",
+      "url": "https://vibram-hq-dashboard.vercel.app", "repo": "KeisukeKirby/vibram-hq-dashboard"
+    },
+    {
+      "id": "test-internet", "archived": true, "name": "test-internet",
+      "summary": "動作確認用。Vercel プロジェクトは削除済み。",
+      "url": "https://test-internet.vercel.app", "repo": "KeisukeKirby/test-internet"
+    },
+    {
+      "id": "sales-stock-board", "archived": true, "name": "sales-stock-board",
+      "summary": "公開 URL なし。", "repo": "KeisukeKirby/sales-stock-board"
+    },
+    {
+      "id": "shimadasan", "archived": true, "name": "Shimadasan",
+      "summary": "公開 URL なし。", "repo": "KeisukeKirby/Shimadasan"
+    },
+    {
+      "id": "test", "archived": true, "name": "test",
+      "summary": "公開 URL なし。", "repo": "KeisukeKirby/test"
+    }
+  ]
+}

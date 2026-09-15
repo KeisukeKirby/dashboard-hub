@@ -1,0 +1,1021 @@
+<title>Barefootinc Backroom</title>
+<meta name="description" content="Keisuke が作ったダッシュボード・ツール・LP の置き場">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --ground: #ECEEEB;
+    --card: #FAFBF9;
+    --label: #F1F3F0;
+    --ink: #161A18;
+    --ink-2: #4C5450;
+    --ink-3: #646C68;
+    --line: #D2D7D3;
+    --line-strong: #A9B1AC;
+    --accent: #1F5F7A;
+    --sticker: #F2C230;
+    --sticker-edge: #9C7A0E;
+    --ok: #2E7A4A;
+    --warn: #9A5B0E;
+    --bad: #B3261E;
+    --chip-on: #161A18;
+    --chip-on-ink: #FAFBF9;
+    --display: "Archivo", "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+    --body: "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #111413;
+      --card: #191D1B;
+      --label: #1F2421;
+      --ink: #E5E9E6;
+      --ink-2: #A6AFAA;
+      --ink-3: #87908B;
+      --line: #2C322F;
+      --line-strong: #4A534E;
+      --accent: #7DBAD3;
+      --sticker: #E6B52C;
+      --sticker-edge: #E6B52C;
+      --ok: #62C18C;
+      --warn: #E3A857;
+      --bad: #F0827A;
+      --chip-on: #E5E9E6;
+      --chip-on-ink: #111413;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #111413;
+    --card: #191D1B;
+    --label: #1F2421;
+    --ink: #E5E9E6;
+    --ink-2: #A6AFAA;
+    --ink-3: #87908B;
+    --line: #2C322F;
+    --line-strong: #4A534E;
+    --accent: #7DBAD3;
+    --sticker: #E6B52C;
+    --sticker-edge: #E6B52C;
+    --ok: #62C18C;
+    --warn: #E3A857;
+    --bad: #F0827A;
+    --chip-on: #E5E9E6;
+    --chip-on-ink: #111413;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 15px/1.6 var(--body);
+    padding-inline: 20px;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .wrap { max-width: 1240px; margin-inline: auto; padding-block: 0 48px; }
+
+  /* masthead */
+  .masthead {
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+    gap: 18px 40px; padding-block: 32px 20px; border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    margin: 0 0 6px; font: 500 12px/1 var(--mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  h1 {
+    margin: 0; font-family: var(--display); font-weight: 800; font-stretch: 68%;
+    font-size: clamp(44px, 7vw, 76px); line-height: .9; letter-spacing: -.005em; text-transform: uppercase;
+  }
+  .lede { margin: 12px 0 0; max-width: 46ch; color: var(--ink-2); text-wrap: pretty; }
+  .tally { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; font-family: var(--mono); }
+  .tally > div { display: flex; align-items: center; gap: 7px; }
+  .tally dt { font-size: 12.5px; color: var(--ink-3); order: 2; }
+  .tally dd { margin: 0; font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; order: 1; }
+  .tally .mark { order: 0; }
+  .checked { flex-basis: 100%; margin: 0; font: 400 12px/1.4 var(--mono); color: var(--ink-3); }
+
+  /* status marks: shape + color, never color alone */
+  .mark { display: inline-block; width: 9px; height: 9px; flex: none; }
+  .mark.ok { background: var(--ok); border-radius: 50%; }
+  .mark.bad { background: var(--bad); transform: rotate(45deg) scale(.85); }
+  .mark.muted { border: 1.5px solid var(--ink-3); border-radius: 50%; }
+  .mark.lock { width: 10px; height: 11px; background:
+      linear-gradient(var(--ink-2), var(--ink-2)) bottom / 100% 62% no-repeat;
+    border-radius: 1px; position: relative; }
+  .mark.lock::before { content: ""; position: absolute; left: 2px; right: 2px; top: -1px; height: 6px;
+    border: 1.5px solid var(--ink-2); border-bottom: 0; border-radius: 4px 4px 0 0; }
+
+  /* attention */
+  .attention { margin-top: 20px; background: var(--card); border-radius: 8px; padding: 14px 18px 8px; }
+  .attention h2 { margin: 0 0 4px; font: 700 14px/1.4 var(--body); display: flex; gap: 8px; align-items: baseline; }
+  .attention h2 .n { font: 500 13px/1 var(--mono); color: var(--ink-3); }
+  .attention ul { list-style: none; margin: 0; padding: 0; }
+  .attention li {
+    display: grid; grid-template-columns: 18px 1fr auto; gap: 4px 10px; align-items: baseline;
+    padding-block: 9px; border-top: 1px solid var(--line); font-size: 14px;
+  }
+  .attention li:first-child { border-top: 0; }
+  .attention .sev { font: 700 12px/1 var(--mono); text-align: center; }
+  .attention .sev.warn { color: var(--warn); }
+  .attention .sev.bad { color: var(--bad); }
+  .attention b { font-weight: 700; }
+  .attention .go { font-size: 13px; white-space: nowrap; }
+
+  /* controls */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-block: 18px 14px; }
+  @media (min-width: 760px) {
+    .controls { position: sticky; top: 0; z-index: 5; background: var(--ground); }
+  }
+  .search {
+    flex: 1 1 260px; display: flex; align-items: center; gap: 8px; height: 38px; padding-inline: 11px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px; color: var(--ink-3);
+  }
+  .search:focus-within { border-color: var(--accent); }
+  .search input { flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 14px; outline: none; }
+  .search kbd { font: 500 11px/1 var(--mono); padding: 3px 6px; border: 1px solid var(--line); border-radius: 4px; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--ground); }
+  .seg button { height: 36px; padding-inline: 13px; border: 0; background: transparent; color: var(--ink-2); font-size: 13.5px; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); font-weight: 700; }
+  .chips { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px; height: 32px; padding-inline: 13px;
+    border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-2); font-size: 13.5px;
+  }
+  .chip:hover { border-color: var(--line-strong); color: var(--ink); }
+  .chip .n { font: 400 12px/1 var(--mono); color: var(--ink-3); }
+  .chip[aria-pressed="true"] { background: var(--chip-on); border-color: var(--chip-on); color: var(--chip-on-ink); }
+  .chip[aria-pressed="true"] .n { color: inherit; opacity: .7; }
+
+  /* board */
+  .area { margin-top: 26px; }
+  .area-head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 12px; }
+  .area-head h2 { margin: 0; font: 700 17px/1.3 var(--body); text-wrap: balance; }
+  .area-head .n { font: 400 12.5px/1 var(--mono); color: var(--ink-3); }
+  .area-head::after { content: ""; flex: 1; align-self: center; border-top: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 292px), 1fr)); gap: 12px; }
+
+  .card {
+    position: relative; display: flex; flex-direction: column; gap: 9px; padding: 13px 14px 14px;
+    background: var(--card); border: 1px solid transparent; border-radius: 8px;
+  }
+  .card:hover { border-color: var(--line-strong); }
+  .card:focus-within { border-color: var(--accent); }
+  .card-top {
+    display: flex; align-items: center; gap: 8px; min-height: 26px;
+    font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
+  }
+  .cc { display: inline-flex; gap: 4px; margin-left: auto; }
+  .cc span { padding: 3px 5px; border: 1px solid var(--line); border-radius: 3px; color: var(--ink-2); letter-spacing: .04em; }
+  .pin {
+    position: relative; z-index: 1; width: 28px; height: 26px; margin-right: -6px; display: grid; place-items: center;
+    border: 0; background: transparent; border-radius: 4px; color: var(--ink-3);
+  }
+  .card-top .cc:empty + .pin { margin-left: auto; }
+  .pin:hover { color: var(--ink); background: var(--label); }
+  .pin svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+  .pin[aria-pressed="true"] svg { fill: var(--sticker); stroke: var(--sticker-edge); }
+  .card h3 { margin: 0; font: 700 17px/1.4 var(--display); font-stretch: 100%; text-wrap: balance; overflow-wrap: anywhere; }
+  .card h3 a { color: var(--ink); text-decoration: none; }
+  .card h3 a::after { content: ""; position: absolute; inset: 0; border-radius: 8px; }
+  .card h3 a:focus-visible { outline: none; }
+  .card h3 .ext { display: inline-block; margin-left: 4px; font: 400 13px/1 var(--mono); color: var(--ink-3); }
+  .sum { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty; }
+  .flag { margin: 0; font-size: 13px; line-height: 1.55; color: var(--warn); }
+  .flag::before { content: "! "; font: 700 12px/1 var(--mono); }
+  .more { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; }
+  .more a { position: relative; z-index: 1; }
+
+  /* the box-end label: fields like a stockroom shoebox sticker */
+  .label {
+    margin: auto 0 0; display: grid; grid-template-columns: .9fr 1fr 1.15fr;
+    background: var(--label); border: 1px solid var(--line); border-radius: 4px; font-family: var(--mono);
+  }
+  .label > div { min-width: 0; padding: 6px 8px 7px; }
+  .label > div + div { border-left: 1px solid var(--line); }
+  .label .slug { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+  .label dt { font-size: 9.5px; line-height: 1; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+  .label dd { margin: 4px 0 0; font-size: 12.5px; line-height: 1.3; color: var(--ink); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+  .label dd small { font-size: 11px; color: var(--ink-3); }
+  .label .slug dd { font-size: 11.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+
+  .empty { margin-top: 32px; padding: 28px; text-align: center; color: var(--ink-2); background: var(--card); border-radius: 8px; }
+  .empty button { margin-top: 10px; height: 34px; padding-inline: 14px; border: 1px solid var(--line-strong); border-radius: 6px; background: transparent; }
+
+  /* archive */
+  .archive { margin-top: 40px; }
+  .table-wrap { overflow-x: auto; background: var(--card); border-radius: 8px; }
+  table { width: 100%; min-width: 620px; border-collapse: collapse; font-size: 13.5px; }
+  th { text-align: left; padding: 10px 14px; font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line); }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { color: var(--ink); }
+  td.mono { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td .st { display: inline-flex; align-items: center; gap: 6px; }
+
+  footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+  footer code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+
+  @media (max-width: 520px) {
+    body { padding-inline: 16px; }
+    .masthead { padding-block: 24px 16px; }
+    .label { grid-template-columns: 1fr 1fr; }
+    .label > div:nth-child(3) { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--line); }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .card, .chip, .pin { transition: border-color .12s, background-color .12s, color .12s; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Barefootinc · TH / MY</p>
+      <h1>Backroom</h1>
+      <p class="lede">Keisuke が作ったダッシュボード・ツール・LP の置き場。カードを押すと本番の URL が新しいタブで開きます。</p>
+    </div>
+    <dl class="tally" id="tally"></dl>
+  </header>
+
+  <section class="attention" id="attention" aria-labelledby="attention-title" hidden>
+    <h2 id="attention-title">要確認 <span class="n" id="attention-count"></span></h2>
+    <ul id="attention-list"></ul>
+  </section>
+
+  <div class="controls" role="search">
+    <label class="search" for="q">
+      <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="名前・プロジェクト名・メモで探す" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <div class="seg" id="country" role="group" aria-label="国"></div>
+    <div class="seg" id="view" role="group" aria-label="並べ方"></div>
+    <div class="chips" id="areas" role="group" aria-label="分野"></div>
+  </div>
+
+  <main id="board"></main>
+
+  <section class="archive" id="archive" aria-labelledby="archive-title">
+    <div class="area-head"><h2 id="archive-title">停止・未公開</h2><span class="n" id="archive-count"></span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">リポジトリ</th><th scope="col">状態</th><th scope="col">最終 push</th><th scope="col">メモ</th></tr></thead>
+        <tbody id="archive-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script id="hub-data" type="application/json">{
+ "checkedAt": "2026-09-15T11:23+07:00",
+ "offline": false,
+ "areas": [
+  {
+   "id": "sales",
+   "label": "販売・売上"
+  },
+  {
+   "id": "work",
+   "label": "タスク・記録"
+  },
+  {
+   "id": "store",
+   "label": "店舗・売場"
+  },
+  {
+   "id": "brand",
+   "label": "ブランド・集客"
+  },
+  {
+   "id": "other",
+   "label": "レポート・その他"
+  }
+ ],
+ "kinds": {
+  "dashboard": "ダッシュボード",
+  "app": "アプリ",
+  "lp": "LP",
+  "3d": "3D",
+  "map": "平面図",
+  "report": "レポート"
+ },
+ "items": [
+  {
+   "id": "sales-h1-2026",
+   "name": "販売実績ダッシュボード 2026年上期",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "TH"
+   ],
+   "summary": "タイの全店舗・オンライン・イベント・委託の売上金額と点数を1〜6月で集計。VFF シューズの足数、ブランド構成、モデル別ランキング。日英切替。",
+   "url": "https://sales-1st-half-26-dashboard.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/sales-1st-half-26-dashboard",
+   "repo": "KeisukeKirby/sales-1st-half-26-dashboard",
+   "updated": "2026-09-14",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "my-sales",
+   "name": "Barefoot Malaysia 販売実績",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "MY"
+   ],
+   "summary": "Johor Bahru 店の開業(7/17)以降を週次・月次で集計。店舗 POS と Shopee・Lazada・直販を分け、未入金は台帳で別管理。",
+   "url": "https://barefoot-my-sales-dashboard.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/barefoot-my-sales-dashboard",
+   "repo": "KeisukeKirby/barefoot-my-sales-dashboard",
+   "updated": "2026-09-14",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "my-sales-artifact",
+   "name": "Barefoot Malaysia 販売実績(Artifact 版)",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "MY"
+   ],
+   "summary": "同名の Vercel 版とは別に置いている Artifact。日次・曜日と時間帯・サイズとカラー・注文明細までタブで見られる。",
+   "url": "https://claude.ai/artifact/2cW3VBzYxRDjygcQ6myRhE",
+   "host": "artifact",
+   "updated": "2026-09-14",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "sales-h1-artifact",
+   "name": "販売実績ダッシュボード 2026年上期(Artifact 版)",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "TH"
+   ],
+   "summary": "上期(1〜6月)ダッシュボードの Artifact 版。タブ構成は Vercel 版と同じ。",
+   "url": "https://claude.ai/artifact/B6bLaDksDWrfnqKyGtEX63",
+   "host": "artifact",
+   "updated": "2026-08-18",
+   "flag": "8/18 から更新なし。Vercel 版にはその後、Siam Discovery の計上方法の修正や税抜表示への切替が入っているので、数字は Vercel 版を正とする",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "bls-2026",
+   "name": "VFF 出展売上 Baan Lae Suan Fair 2026",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "TH"
+   ],
+   "summary": "BITEC Bangna の Baan Lae Suan Fair(7/31〜8/9)に出展した期間の売上記録。",
+   "url": "https://sales-record-baanlaesuan.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/sales-record-baanlaesuan",
+   "repo": "KeisukeKirby/sales-record-baanlaesuan",
+   "updated": "2026-08-14",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "vft-csv",
+   "name": "Vibram FiveFingers Thailand Sales",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [
+    "TH"
+   ],
+   "summary": "CSV を画面で読み込むと、月次売上・店舗別・商品 Top 10 を表示する分析ツール。データは同梱していない。",
+   "url": "https://vibram-thailand-dashboard.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/vft-sales-analysis",
+   "repo": "KeisukeKirby/vibram-thailand-dashboard",
+   "updated": "2026-07-13",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "zort",
+   "name": "zort-dashboard",
+   "area": "sales",
+   "kind": "dashboard",
+   "country": [],
+   "summary": "Basic 認証(Secure Dashboard)付きの Next.js アプリ。中身は外から確認できていない。名前から ZORT の受注・在庫データと推定。",
+   "url": "https://zort-dashboard.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/zort-dashboard",
+   "updated": "2026-08-31",
+   "httpStatus": 401,
+   "status": "locked"
+  },
+  {
+   "id": "tasks",
+   "name": "K.HoshinoTasks",
+   "area": "work",
+   "kind": "app",
+   "country": [],
+   "summary": "個人のタスク・プロジェクト・カンバンを一元管理。サーバーの API に保存し、管理者モードで編集する。",
+   "url": "https://task-managememt.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/personal-task-managememt",
+   "repo": "KeisukeKirby/task-managememt",
+   "updated": "2026-09-04",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "projecthub",
+   "name": "ProjectHub",
+   "area": "work",
+   "kind": "app",
+   "country": [],
+   "summary": "複数プロジェクトの進捗管理。締切からの逆算スケジュール、ガント、カンバン、リードタイム分析。",
+   "url": "https://project-task-delta.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/team-task-management",
+   "repo": "KeisukeKirby/project-task",
+   "updated": "2026-08-04",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "my-log",
+   "name": "My Log",
+   "area": "work",
+   "kind": "app",
+   "country": [],
+   "summary": "予定・タスクと、ランニング・筋トレ・語学・読書・睡眠などの積み上げを記録。データはブラウザ内だけに保存。",
+   "url": "https://my-log-topaz.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/my-log",
+   "repo": "KeisukeKirby/my-log",
+   "updated": "2026-08-19",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "personal-dashboard",
+   "name": "My Dashboard",
+   "area": "work",
+   "kind": "app",
+   "country": [],
+   "summary": "目標ボード、習慣トラッカー、人生カウントダウン、旅行リスト。Supabase に保存。",
+   "url": "https://personal-dashboard-kappa-eight.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/personal-dashboard",
+   "repo": "KeisukeKirby/personal-dashboard",
+   "updated": "2026-07-01",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "lingodash",
+   "name": "LingoDash",
+   "area": "work",
+   "kind": "app",
+   "country": [],
+   "summary": "語学学習の記録。復習カード、1日の目標時間、XP、学習ヒートマップ。データはブラウザ内に保存。GitHub のリポジトリは KeisukeKirby 配下に見当たらない。",
+   "url": "https://lingodash-eta.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/lingodash",
+   "updated": "2026-07-01",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "kv-after",
+   "name": "K Village 改装後3Dイメージ",
+   "area": "store",
+   "kind": "3d",
+   "country": [
+    "TH"
+   ],
+   "summary": "K Village 店の改装後の売場イメージを3Dで表示。",
+   "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x",
+   "host": "artifact",
+   "updated": "2026-09-11",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "kv-texture",
+   "name": "K Village 実写3Dレイアウト",
+   "area": "store",
+   "kind": "3d",
+   "country": [
+    "TH"
+   ],
+   "summary": "店内写真を壁ごとに遠近補正して貼った、現状の売場の実写テクスチャ3D。",
+   "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb",
+   "host": "artifact",
+   "updated": "2026-09-07",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "kv-photo-matched",
+   "name": "K Village 3Dレイアウト(写真ベース)",
+   "area": "store",
+   "kind": "3d",
+   "country": [
+    "TH"
+   ],
+   "summary": "店内写真12枚から起こし直し、改装前モデルとの差分10件を注記した版。日英切替。",
+   "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi",
+   "host": "artifact",
+   "updated": "2026-09-07",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "kv-before",
+   "name": "K Village 3Dレイアウト(改装前)",
+   "area": "store",
+   "kind": "3d",
+   "country": [
+    "TH"
+   ],
+   "summary": "改装前の売場を什器単位で3D化したモデル。",
+   "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3",
+   "host": "artifact",
+   "updated": "2026-09-07",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "store-3d-en",
+   "name": "Barefoot Store 3D Layout",
+   "area": "store",
+   "kind": "3d",
+   "country": [
+    "TH"
+   ],
+   "summary": "店内写真9枚から起こした最初の3Dレイアウト(英語)。売場 5.2 × 11.5 m、ゾーン別の什器と推定寸法。",
+   "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484",
+   "host": "artifact",
+   "updated": "2026-08-31",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "photo-map",
+   "name": "ベアフット店舗フォトマップ",
+   "area": "store",
+   "kind": "map",
+   "country": [
+    "TH"
+   ],
+   "summary": "3Dレイアウトと同じ平面に、撮影位置9か所と向きを記入。写真を読み込むと平面と実写を並べて見られる(写真は端末内だけに保存)。",
+   "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou",
+   "host": "artifact",
+   "updated": "2026-08-31",
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "t21-lp",
+   "name": "Terminal 21 Asok イベント LP",
+   "area": "brand",
+   "kind": "lp",
+   "country": [
+    "TH"
+   ],
+   "summary": "24th Absolute The Festival of Movement(9/15〜10/4、Terminal 21 Asok G階)の VFF × Vivobarefoot 出展 LP。英語・タイ語。",
+   "url": "https://terminal21-asok-lp.vercel.app",
+   "host": "vercel",
+   "vercel": "shima-s-projects2/terminal21-asok-lp",
+   "repo": "shimadatatsuki-netizen/terminal21-asok-lp",
+   "updated": "2026-09-11",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "t21-lp-old",
+   "name": "Terminal 21 Asok イベント LP(旧 URL)",
+   "area": "brand",
+   "kind": "lp",
+   "country": [
+    "TH"
+   ],
+   "summary": "9/9 に先方の Vercel へ移す前の LP。移管後の修正は反映されない。",
+   "flag": "会期中(9/15〜10/4)も旧 URL が公開されたまま。告知物やリンクに旧 URL が残っていないか確認",
+   "url": "https://barefootinc-t21-asok-event.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/barefootinc-t21-asok-event",
+   "repo": "KeisukeKirby/barefootinc-t21-asok-event",
+   "links": [
+    {
+     "label": "現行の LP",
+     "url": "https://terminal21-asok-lp.vercel.app"
+    }
+   ],
+   "updated": "2026-09-09",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "vivo-lp",
+   "name": "Vivobarefoot Thailand LP",
+   "area": "brand",
+   "kind": "lp",
+   "country": [
+    "TH"
+   ],
+   "summary": "K Village 旗艦店での Vivobarefoot 取り扱い開始を告知する LP。",
+   "url": "https://vivobarefoot-lp.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/vivobarefoot-lp",
+   "repo": "KeisukeKirby/vivobarefoot-lp",
+   "updated": "2026-08-21",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "my-store-lp",
+   "name": "VFF Malaysia 店舗案内",
+   "area": "brand",
+   "kind": "lp",
+   "country": [
+    "MY"
+   ],
+   "summary": "Johor Bahru(Taman Pelangi)の VFF 旗艦店の案内ページ。",
+   "url": "https://barefoot-store-guidance-my.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/malaysia-landing-page",
+   "repo": "KeisukeKirby/barefoot-store-guidance-my",
+   "updated": "2026-08-13",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "artwork-check",
+   "name": "Vibram Brand Compliance Dashboard",
+   "area": "brand",
+   "kind": "app",
+   "country": [
+    "TH"
+   ],
+   "summary": "Vibram 製品のアートワークをブランド基準でチェックし、承認するためのダッシュボード。",
+   "url": "https://vibram-hq-artwork-check.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/vibram-hq-artwork-check",
+   "repo": "KeisukeKirby/vibram-hq-artwork-check",
+   "updated": "2026-06-29",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "kl-trip",
+   "name": "クアラルンプール出張報告",
+   "area": "other",
+   "kind": "report",
+   "country": [
+    "MY"
+   ],
+   "summary": "クアラルンプール出張の報告書。日本語版と英語版の2本。",
+   "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2",
+   "host": "artifact",
+   "updated": "2026-08-31",
+   "links": [
+    {
+     "label": "English 版",
+     "url": "https://claude.ai/artifact/16w3H5WaEvYoRVPCyHYP6C"
+    }
+   ],
+   "httpStatus": 0,
+   "status": "artifact"
+  },
+  {
+   "id": "currency",
+   "name": "Currency Rate Dashboard",
+   "area": "other",
+   "kind": "dashboard",
+   "country": [],
+   "summary": "為替レートの一覧。ExchangeRate-API の最新値と、欧州中央銀行(Frankfurter 経由)の履歴チャート・日付比較。",
+   "url": "https://currency-dashboard-six.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/currency-dashboard",
+   "repo": "KeisukeKirby/currency-dashboard",
+   "updated": "2026-08-03",
+   "httpStatus": 200,
+   "status": "live"
+  },
+  {
+   "id": "vibram-dashboard",
+   "archived": true,
+   "name": "vibram-dashboard",
+   "summary": "Next.js の初期テンプレートのまま。Vercel プロジェクトは削除済み。",
+   "url": "https://vibram-dashboard.vercel.app",
+   "repo": "KeisukeKirby/vibram-dashboard",
+   "updated": "2026-07-06",
+   "httpStatus": 404,
+   "status": "down"
+  },
+  {
+   "id": "vibram-hq-dashboard",
+   "archived": true,
+   "name": "vibram-hq-dashboard",
+   "summary": "Vibram HQ がタイの販促物を承認する画面の試作。Brand Compliance Dashboard の前身と推定。",
+   "url": "https://vibram-hq-dashboard.vercel.app",
+   "repo": "KeisukeKirby/vibram-hq-dashboard",
+   "updated": "2026-06-19",
+   "httpStatus": 404,
+   "status": "down"
+  },
+  {
+   "id": "test-internet",
+   "archived": true,
+   "name": "test-internet",
+   "summary": "動作確認用。Vercel プロジェクトは削除済み。",
+   "url": "https://test-internet.vercel.app",
+   "repo": "KeisukeKirby/test-internet",
+   "updated": "2026-06-23",
+   "httpStatus": 404,
+   "status": "down"
+  },
+  {
+   "id": "sales-stock-board",
+   "archived": true,
+   "name": "sales-stock-board",
+   "summary": "公開 URL なし。",
+   "repo": "KeisukeKirby/sales-stock-board",
+   "updated": "2026-07-03",
+   "httpStatus": 0,
+   "status": "none"
+  },
+  {
+   "id": "shimadasan",
+   "archived": true,
+   "name": "Shimadasan",
+   "summary": "公開 URL なし。",
+   "repo": "KeisukeKirby/Shimadasan",
+   "updated": "2026-06-19",
+   "httpStatus": 0,
+   "status": "none"
+  },
+  {
+   "id": "test",
+   "archived": true,
+   "name": "test",
+   "summary": "公開 URL なし。",
+   "repo": "KeisukeKirby/test",
+   "updated": "2026-06-16",
+   "httpStatus": 0,
+   "status": "none"
+  }
+ ]
+}</script>
+<script>
+(function () {
+  const DATA = JSON.parse(document.getElementById("hub-data").textContent);
+  const store = {
+    get(key, fallback) {
+      try { const v = localStorage.getItem(key); return v == null ? fallback : JSON.parse(v); } catch (e) { return fallback; }
+    },
+    set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} },
+  };
+
+  const areaLabel = Object.fromEntries(DATA.areas.map((a) => [a.id, a.label]));
+  const areaOrder = Object.fromEntries(DATA.areas.map((a, n) => [a.id, n]));
+  const current = DATA.items.filter((i) => !i.archived);
+  const archived = DATA.items.filter((i) => i.archived);
+  current.forEach((i, n) => { i._order = n; });
+
+  const state = {
+    q: "",
+    area: "all",
+    country: "all",
+    view: store.get("hub.view", "area"),
+    pins: new Set(store.get("hub.pins", [])),
+  };
+
+  const STATUS = {
+    live: { text: () => "公開中", mark: "ok" },
+    locked: { text: () => "認証あり", mark: "lock" },
+    down: { text: (i) => "停止" + (i.httpStatus ? " " + i.httpStatus : ""), mark: "bad" },
+    artifact: { text: () => "要ログイン", mark: "muted" },
+    none: { text: () => "未デプロイ", mark: "muted" },
+  };
+  const HOST = { vercel: "Vercel", artifact: "Artifact" };
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const mark = (cls) => `<i class="mark ${cls}" aria-hidden="true"></i>`;
+
+  function daysSince(iso) {
+    if (!iso) return null;
+    return Math.max(0, Math.floor((Date.now() - new Date(iso + "T00:00:00+07:00").getTime()) / 86400000));
+  }
+  function shortDate(iso) {
+    if (!iso) return "—";
+    const [y, m, d] = iso.split("-");
+    return y === String(new Date().getFullYear()) ? `${m}-${d}` : iso;
+  }
+  function ago(iso) {
+    const n = daysSince(iso);
+    if (n == null) return "";
+    if (n === 0) return "今日";
+    if (n === 1) return "昨日";
+    return `${n}日前`;
+  }
+  function slugOf(i) {
+    if (i.host === "artifact") return i.url.split("/").pop();
+    return i.vercel || i.repo || "";
+  }
+
+  function matches(i, skip) {
+    if (skip !== "area" && state.area !== "all" && i.area !== state.area) return false;
+    if (state.country !== "all" && !(i.country || []).includes(state.country)) return false;
+    if (state.q) {
+      const hay = [i.name, i.summary, i.flag, i.vercel, i.repo, i.url, areaLabel[i.area], DATA.kinds[i.kind]].join(" ").toLowerCase();
+      if (!state.q.toLowerCase().split(/\s+/).filter(Boolean).every((w) => hay.includes(w))) return false;
+    }
+    return true;
+  }
+  const byUpdated = (a, b) => (b.updated || "").localeCompare(a.updated || "") || a._order - b._order;
+
+  function card(i, ctx) {
+    const st = STATUS[i.status] || STATUS.none;
+    const pinned = state.pins.has(i.id);
+    const topLabel = state.view === "recent" || ctx === "pins"
+      ? `${esc(areaLabel[i.area])} · ${esc(DATA.kinds[i.kind])}`
+      : esc(DATA.kinds[i.kind]);
+    const extra = (i.links || []).map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`);
+    if (i.repo) {
+      extra.push(`<a href="https://github.com/${esc(i.repo)}" target="_blank" rel="noopener">GitHub</a>`);
+    }
+    return `<article class="card" data-status="${esc(i.status)}">
+      <div class="card-top">
+        <span>${topLabel}</span>
+        <span class="cc">${(i.country || []).map((c) => `<span>${esc(c)}</span>`).join("")}</span>
+        <button class="pin" type="button" data-pin="${esc(i.id)}" data-ctx="${ctx}" aria-pressed="${pinned}" aria-label="${pinned ? "よく使うから外す" : "よく使うに追加"}: ${esc(i.name)}">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.95 3.95 4.35.63-3.15 3.07.74 4.34L8 11.54l-3.89 2.05.74-4.34L1.7 6.18l4.35-.63z"/></svg>
+        </button>
+      </div>
+      <h3><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.name)}</a></h3>
+      <p class="sum">${esc(i.summary)}</p>
+      ${i.flag ? `<p class="flag">${esc(i.flag)}</p>` : ""}
+      ${extra.length ? `<div class="more">${extra.join("")}</div>` : ""}
+      <dl class="label">
+        <div><dt>Host</dt><dd>${esc(HOST[i.host] || "—")}</dd></div>
+        <div><dt>Updated</dt><dd>${shortDate(i.updated)} <small>${ago(i.updated)}</small></dd></div>
+        <div><dt>Status</dt><dd>${mark(st.mark)}${esc(st.text(i))}</dd></div>
+        <div class="slug"><dt>${i.host === "artifact" ? "Artifact ID" : "Project"}</dt><dd>${esc(slugOf(i))}</dd></div>
+      </dl>
+    </article>`;
+  }
+
+  function section(id, title, items, ctx) {
+    return `<section class="area" aria-labelledby="h-${id}">
+      <div class="area-head"><h2 id="h-${id}">${esc(title)}</h2><span class="n">${items.length}</span></div>
+      <div class="grid">${items.map((i) => card(i, ctx)).join("")}</div>
+    </section>`;
+  }
+
+  function renderControls() {
+    const countries = [["all", "すべて"], ["TH", "TH"], ["MY", "MY"]];
+    document.getElementById("country").innerHTML = countries
+      .map(([v, t]) => `<button type="button" data-country="${v}" aria-pressed="${state.country === v}">${t}</button>`).join("");
+    const views = [["area", "分野別"], ["recent", "更新順"]];
+    document.getElementById("view").innerHTML = views
+      .map(([v, t]) => `<button type="button" data-view="${v}" aria-pressed="${state.view === v}">${t}</button>`).join("");
+    const pool = current.filter((i) => matches(i, "area"));
+    const chips = [{ id: "all", label: "すべて" }, ...DATA.areas].map((a) => {
+      const n = a.id === "all" ? pool.length : pool.filter((i) => i.area === a.id).length;
+      return `<button class="chip" type="button" data-area="${a.id}" aria-pressed="${state.area === a.id}">${esc(a.label)}<span class="n">${n}</span></button>`;
+    });
+    document.getElementById("areas").innerHTML = chips.join("");
+  }
+
+  function renderBoard() {
+    const shown = current.filter((i) => matches(i));
+    const board = document.getElementById("board");
+    if (!shown.length) {
+      board.innerHTML = `<div class="empty">条件に合うものがありません。<br><button type="button" data-reset>条件をクリア</button></div>`;
+      return;
+    }
+    let html = "";
+    if (state.view === "recent") {
+      html = section("recent", "更新が新しい順", shown.slice().sort(byUpdated), "recent");
+    } else {
+      const pins = shown.filter((i) => state.pins.has(i.id)).sort(byUpdated);
+      if (pins.length) html += section("pins", "よく使う", pins, "pins");
+      DATA.areas.forEach((a) => {
+        const items = shown.filter((i) => i.area === a.id).sort(byUpdated);
+        if (items.length) html += section(a.id, a.label, items, "area");
+      });
+    }
+    board.innerHTML = html;
+  }
+
+  function render(focus) {
+    renderControls();
+    renderBoard();
+    if (focus) {
+      const el = document.querySelector(focus);
+      if (el) el.focus();
+    }
+  }
+
+  function renderStatic() {
+    const count = (s) => current.filter((i) => i.status === s).length;
+    const tally = [
+      ["ok", "公開中", count("live")],
+      ["lock", "認証あり", count("locked")],
+      ["muted", "Artifact", count("artifact")],
+      ["bad", "停止・未公開", archived.length],
+    ];
+    const checked = new Date(DATA.checkedAt);
+    const stamp = DATA.checkedAt.replace("T", " ").slice(0, 16);
+    document.getElementById("tally").innerHTML = tally
+      .map(([m, t, n]) => `<div>${mark(m)}<dt>${t}</dt><dd>${n}</dd></div>`).join("") +
+      `<p class="checked">${DATA.offline ? "オフラインでビルド — 状態は未確認" : `状態の確認 ${esc(stamp)} (UTC+7)`}</p>`;
+
+    const rows = [];
+    current.forEach((i) => {
+      if (i.flag) rows.push({ sev: "warn", item: i, text: i.flag });
+      else if (i.status === "down") rows.push({ sev: "bad", item: i, text: `本番 URL が応答しません(HTTP ${i.httpStatus || "—"})` });
+    });
+    const deadHome = archived.filter((i) => i.url && i.status === "down");
+    if (deadHome.length) {
+      rows.push({
+        sev: "warn",
+        text: `GitHub の homepage に、もう開けない URL が残っているリポジトリが ${deadHome.length} 件あります(${deadHome.map((i) => i.repo.split("/")[1]).join(", ")})`,
+        href: "#archive",
+        go: "一覧へ",
+      });
+    }
+    const box = document.getElementById("attention");
+    box.hidden = !rows.length;
+    document.getElementById("attention-count").textContent = rows.length;
+    document.getElementById("attention-list").innerHTML = rows.map((r) => `<li>
+      <span class="sev ${r.sev}" aria-label="${r.sev === "bad" ? "停止" : "注意"}">${r.sev === "bad" ? "✕" : "!"}</span>
+      <span>${r.item ? `<b>${esc(r.item.name)}</b> — ` : ""}${esc(r.text)}</span>
+      <a class="go" href="${esc(r.href || r.item.url)}" ${r.href ? "" : 'target="_blank" rel="noopener"'}>${r.go || "開く"}</a>
+    </li>`).join("");
+
+    document.getElementById("archive-count").textContent = archived.length;
+    document.getElementById("archive-rows").innerHTML = archived.map((i) => {
+      const st = STATUS[i.status] || STATUS.none;
+      return `<tr>
+        <td><a href="https://github.com/${esc(i.repo)}" target="_blank" rel="noopener">${esc(i.repo.split("/")[1])}</a></td>
+        <td><span class="st">${mark(st.mark)}${esc(st.text(i))}</span></td>
+        <td class="mono">${esc(i.updated || "—")}</td>
+        <td>${esc(i.flag || i.summary || "")}</td>
+      </tr>`;
+    }).join("");
+
+    document.getElementById("footer").innerHTML =
+      `一覧の元データは <code>catalog.json</code>。<code>python build.py</code> を実行すると、公開状態と更新日を取り直して、カタログに未登録の Vercel プロジェクトと GitHub リポジトリを表示します。`;
+  }
+
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("button");
+    if (!t) return;
+    if (t.dataset.pin) {
+      const id = t.dataset.pin;
+      state.pins.has(id) ? state.pins.delete(id) : state.pins.add(id);
+      store.set("hub.pins", [...state.pins]);
+      render(`[data-pin="${CSS.escape(id)}"][data-ctx="${t.dataset.ctx}"]`);
+    } else if (t.dataset.area) {
+      state.area = t.dataset.area;
+      render(`[data-area="${t.dataset.area}"]`);
+    } else if (t.dataset.country) {
+      state.country = t.dataset.country;
+      render(`[data-country="${t.dataset.country}"]`);
+    } else if (t.dataset.view) {
+      state.view = t.dataset.view;
+      store.set("hub.view", state.view);
+      render(`[data-view="${t.dataset.view}"]`);
+    } else if ("reset" in t.dataset) {
+      state.q = ""; state.area = "all"; state.country = "all";
+      document.getElementById("q").value = "";
+      render("#q");
+    }
+  });
+  document.getElementById("q").addEventListener("input", (e) => {
+    state.q = e.target.value.trim();
+    render();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      document.getElementById("q").focus();
+    }
+  });
+
+  renderStatic();
+  render();
+})();
+</script>
