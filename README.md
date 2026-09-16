@@ -3,6 +3,8 @@
 Barefoot Inc(タイ・マレーシア)向けに作ったダッシュボード・ツール・LP・Artifact を、1ページで一覧する静的ページ。
 分野・国での絞り込み、検索、公開状態(公開中 / 認証あり / 停止)と最終更新日、要確認事項を表示する。
 
+公開 URL: https://barefootinc-backroom.vercel.app (Vercel チーム barefootinc-th / プロジェクト barefootinc-backroom)
+
 ## 更新のしかた
 
 1. `catalog.json` に項目を追加・修正する(名前・分野・説明は手書き)
