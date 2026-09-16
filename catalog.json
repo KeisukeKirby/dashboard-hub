@@ -1,7 +1,7 @@
 {
   "githubOwner": "KeisukeKirby",
   "watchScopes": ["barefootinc-th"],
-  "ignore": ["KeisukeKirby/dashboard-hub"],
+  "ignore": ["KeisukeKirby/dashboard-hub", "barefootinc-th/barefootinc-backroom"],
   "areas": [
     { "id": "sales", "label": "販売・売上" },
     { "id": "work", "label": "タスク・記録" },
