@@ -21,6 +21,7 @@
     --bad: #B3261E;
     --chip-on: #161A18;
     --chip-on-ink: #FAFBF9;
+    --thumb-dim: 1;
     --display: "Archivo", "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
     --body: "IBM Plex Sans JP", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
     --mono: "IBM Plex Mono", "IBM Plex Sans JP", ui-monospace, "Cascadia Mono", Consolas, monospace;
@@ -43,6 +44,7 @@
       --bad: #F0827A;
       --chip-on: #E5E9E6;
       --chip-on-ink: #111413;
+      --thumb-dim: .9;
     }
   }
   :root[data-theme="dark"] {
@@ -62,6 +64,7 @@
     --bad: #F0827A;
     --chip-on: #E5E9E6;
     --chip-on-ink: #111413;
+    --thumb-dim: .9;
   }
 
   * { box-sizing: border-box; }
@@ -166,6 +169,20 @@
   }
   .card:hover { border-color: var(--line-strong); }
   .card:focus-within { border-color: var(--accent); }
+  .thumb {
+    position: relative; aspect-ratio: 16 / 10; max-width: 100%; overflow: hidden;
+    background: var(--label); border: 1px solid var(--line); border-radius: 5px;
+  }
+  .card:hover .thumb { border-color: var(--line-strong); }
+  .thumb img {
+    display: block; width: 100%; height: 100%; object-fit: cover; object-position: top center;
+    filter: brightness(var(--thumb-dim));
+  }
+  .thumb .none {
+    position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px;
+    font: 400 12px/1.4 var(--mono); color: var(--ink-3);
+    background: repeating-linear-gradient(135deg, transparent 0 10px, var(--line) 10px 11px);
+  }
   .card-top {
     display: flex; align-items: center; gap: 8px; min-height: 26px;
     font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
@@ -342,6 +359,14 @@
   }
   const byUpdated = (a, b) => (b.updated || "").localeCompare(a.updated || "") || a._order - b._order;
 
+  function thumb(i) {
+    if (i.thumb) {
+      return `<div class="thumb"><img src="${esc(i.thumb)}" alt="" loading="lazy" decoding="async" width="640" height="400"></div>`;
+    }
+    const locked = i.status === "locked";
+    return `<div class="thumb"><div class="none">${locked ? mark("lock") : ""}<span>${locked ? "Basic 認証のためプレビューなし" : "プレビューなし"}</span></div></div>`;
+  }
+
   function card(i, ctx) {
     const st = STATUS[i.status] || STATUS.none;
     const pinned = state.pins.has(i.id);
@@ -353,6 +378,7 @@
       extra.push(`<a href="https://github.com/${esc(i.repo)}" target="_blank" rel="noopener">GitHub</a>`);
     }
     return `<article class="card" data-status="${esc(i.status)}">
+      ${thumb(i)}
       <div class="card-top">
         <span>${topLabel}</span>
         <span class="cc">${(i.country || []).map((c) => `<span>${esc(c)}</span>`).join("")}</span>

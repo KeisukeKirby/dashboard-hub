@@ -11,6 +11,7 @@ Barefoot Inc(タイ・マレーシア)向けに作ったダッシュボード・
 2. `python build.py` を実行する。`vercel` と `gh` の CLI が認証済みであること
    - 公開状態と更新日を取り直して `index.html`(サイト用)と `artifact.html`(Claude Artifact 用)を書き出す
    - カタログに載っていない Vercel プロジェクト・GitHub リポジトリがあれば表示する
+   - `python build.py --shots` でサムネも撮り直す(ヘッドレス Chrome。撮影中は GET 以外のリクエストを遮断するので、表示先のアプリにデータを書き込まない)
 3. コミットして main に反映すると、Vercel が再デプロイする
 
 `index.html` と `artifact.html` は生成物なので直接編集しない。見た目は `template.html` で変える。
