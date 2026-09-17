@@ -2,6 +2,7 @@
 <html lang="ja">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>Barefootinc Backroom</title>
 <meta name="description" content="Keisuke が作ったダッシュボード・ツール・LP の置き場">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -295,12 +296,12 @@
 </div>
 
 <script id="hub-data" type="application/json">{
- "checkedAt": "2026-09-16T16:44+07:00",
+ "checkedAt": "2026-09-17T11:41+07:00",
  "offline": false,
  "areas": [
   {
    "id": "sales",
-   "label": "販売・売上"
+   "label": "販売・在庫"
   },
   {
    "id": "work",
@@ -344,7 +345,7 @@
    "updated": "2026-09-16",
    "httpStatus": 200,
    "status": "live",
-   "thumb": "thumbs/sales-h1-2026.webp?v=444bb3fa"
+   "thumb": "thumbs/sales-h1-2026.webp?v=8aceaaaa"
   },
   {
    "id": "my-sales",
@@ -365,37 +366,22 @@
    "thumb": "thumbs/my-sales.webp?v=6e2d7f2f"
   },
   {
-   "id": "my-sales-artifact",
-   "name": "Barefoot Malaysia 販売実績(Artifact 版)",
-   "area": "sales",
-   "kind": "dashboard",
-   "country": [
-    "MY"
-   ],
-   "summary": "同名の Vercel 版とは別に置いている Artifact。日次・曜日と時間帯・サイズとカラー・注文明細までタブで見られる。",
-   "url": "https://claude.ai/artifact/2cW3VBzYxRDjygcQ6myRhE",
-   "host": "artifact",
-   "updated": "2026-09-14",
-   "httpStatus": 0,
-   "status": "artifact",
-   "thumb": "thumbs/my-sales-artifact.webp?v=ec563945"
-  },
-  {
-   "id": "sales-h1-artifact",
-   "name": "販売実績ダッシュボード 2026年上期(Artifact 版)",
+   "id": "vff-stock",
+   "name": "VFF 在庫一覧",
    "area": "sales",
    "kind": "dashboard",
    "country": [
     "TH"
    ],
-   "summary": "上期(1〜6月)ダッシュボードの Artifact 版。タブ構成は Vercel 版と同じ。",
-   "url": "https://claude.ai/artifact/B6bLaDksDWrfnqKyGtEX63",
-   "host": "artifact",
-   "updated": "2026-08-18",
-   "flag": "8/18 から更新なし。Vercel 版にはその後、Siam Discovery の計上方法の修正や税抜表示への切替が入っているので、数字は Vercel 版を正とする",
-   "httpStatus": 0,
-   "status": "artifact",
-   "thumb": "thumbs/sales-h1-artifact.webp?v=d89c5ee8"
+   "summary": "VFF シューズを SKU(モデル×カラー×サイズ)ごとに、在庫数・入荷予定・月平均販売・在庫月数・ステータスで一覧。月末の在庫表、販売明細、仕入先の梱包明細から集計。",
+   "url": "https://vff-stock-dashboard.vercel.app",
+   "host": "vercel",
+   "vercel": "barefootinc-th/vff-stock-dashboard",
+   "repo": "KeisukeKirby/vff-stock-dashboard",
+   "updated": "2026-09-17",
+   "httpStatus": 200,
+   "status": "live",
+   "thumb": "thumbs/vff-stock.webp?v=b8c61d64"
   },
   {
    "id": "bls-2026",
@@ -461,7 +447,7 @@
    "updated": "2026-09-04",
    "httpStatus": 200,
    "status": "live",
-   "thumb": "thumbs/tasks.webp?v=75009dec"
+   "thumb": "thumbs/tasks.webp?v=16397089"
   },
   {
    "id": "projecthub",
@@ -493,7 +479,7 @@
    "updated": "2026-08-19",
    "httpStatus": 200,
    "status": "live",
-   "thumb": "thumbs/my-log.webp?v=f5cb06a2"
+   "thumb": "thumbs/my-log.webp?v=66060c97"
   },
   {
    "id": "personal-dashboard",
@@ -535,11 +521,18 @@
     "TH"
    ],
    "summary": "K Village 店の改装後の売場イメージを3Dで表示。",
-   "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/kv-after/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/kv-after",
    "updated": "2026-09-11",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/kv-after.webp?v=b3eb783e"
   },
   {
@@ -551,11 +544,18 @@
     "TH"
    ],
    "summary": "店内写真を壁ごとに遠近補正して貼った、現状の売場の実写テクスチャ3D。",
-   "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/kv-texture/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/kv-texture",
    "updated": "2026-09-07",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/kv-texture.webp?v=4ebb7612"
   },
   {
@@ -567,11 +567,18 @@
     "TH"
    ],
    "summary": "店内写真12枚から起こし直し、改装前モデルとの差分10件を注記した版。日英切替。",
-   "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/kv-photo-matched/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/kv-photo-matched",
    "updated": "2026-09-07",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/kv-photo-matched.webp?v=288c889c"
   },
   {
@@ -583,11 +590,18 @@
     "TH"
    ],
    "summary": "改装前の売場を什器単位で3D化したモデル。",
-   "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/kv-before/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/kv-before",
    "updated": "2026-09-07",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/kv-before.webp?v=40ed5e1e"
   },
   {
@@ -599,11 +613,18 @@
     "TH"
    ],
    "summary": "店内写真9枚から起こした最初の3Dレイアウト(英語)。売場 5.2 × 11.5 m、ゾーン別の什器と推定寸法。",
-   "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/store-3d-en/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/store-3d-en",
    "updated": "2026-08-31",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/store-3d-en.webp?v=6e615474"
   },
   {
@@ -615,11 +636,18 @@
     "TH"
    ],
    "summary": "3Dレイアウトと同じ平面に、撮影位置9か所と向きを記入。写真を読み込むと平面と実写を並べて見られる(写真は端末内だけに保存)。",
-   "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/photo-map/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/photo-map",
    "updated": "2026-08-31",
-   "httpStatus": 0,
-   "status": "artifact",
+   "links": [
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou"
+    }
+   ],
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/photo-map.webp?v=24bcfb3c"
   },
   {
@@ -728,17 +756,22 @@
     "MY"
    ],
    "summary": "クアラルンプール出張の報告書。日本語版と英語版の2本。",
-   "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2",
-   "host": "artifact",
+   "url": "https://barefootinc-backroom.vercel.app/p/kl-trip/",
+   "host": "vercel",
+   "slug": "barefootinc-backroom/p/kl-trip",
    "updated": "2026-08-31",
    "links": [
     {
      "label": "English 版",
-     "url": "https://claude.ai/artifact/16w3H5WaEvYoRVPCyHYP6C"
+     "url": "https://barefootinc-backroom.vercel.app/p/kl-trip-en/"
+    },
+    {
+     "label": "元の Artifact",
+     "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2"
     }
    ],
-   "httpStatus": 0,
-   "status": "artifact",
+   "httpStatus": 200,
+   "status": "live",
    "thumb": "thumbs/kl-trip.webp?v=1300aace"
   },
   {
@@ -755,7 +788,7 @@
    "updated": "2026-08-03",
    "httpStatus": 200,
    "status": "live",
-   "thumb": "thumbs/currency.webp?v=4504c4c7"
+   "thumb": "thumbs/currency.webp?v=dd32bc38"
   },
   {
    "id": "vibram-dashboard",
@@ -875,6 +908,7 @@
     return `${n}日前`;
   }
   function slugOf(i) {
+    if (i.slug) return i.slug;
     if (i.host === "artifact") return i.url.split("/").pop();
     return i.vercel || i.repo || "";
   }
