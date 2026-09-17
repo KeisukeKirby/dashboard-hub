@@ -27,11 +27,16 @@ THUMBS = ROOT / "thumbs"
 # Artifact pages need a claude.ai login, so their HTML is fetched by Claude into
 # artifact-src/<item id>/ and photographed locally. Not committed.
 ARTIFACT_SRC = ROOT / "artifact-src"
+# Artifact pages listed in catalog "pages" are copied to p/<id>/ and served by Vercel,
+# so their hub links open without a claude.ai login.
+PAGES = ROOT / "p"
 THUMB_SIZE = (640, 400)
 BKK = dt.timezone(dt.timedelta(hours=7))
 STANDALONE_HEAD = (
     '<!doctype html>\n<html lang="ja">\n<meta charset="utf-8">\n'
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+    # internal pages: reachable by URL, but kept out of search results
+    '<meta name="robots" content="noindex">\n'
 )
 # The Artifact host adds these base rules around every page.
 ARTIFACT_HEAD = STANDALONE_HEAD + (
@@ -141,6 +146,18 @@ def take_shots(items):
             print(f"  thumb: {r['id']}" + (f"({'、'.join(notes)})" if notes else ""))
 
 
+def publish_pages(page_ids):
+    for page_id in page_ids:
+        src = ARTIFACT_SRC / page_id / "index.html"
+        if not src.exists():
+            # keep whatever copy is already committed in p/
+            print(f"  ! ページ未更新: {page_id}({src.relative_to(ROOT)} がない)")
+            continue
+        out = PAGES / page_id / "index.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(ARTIFACT_HEAD + src.read_text(encoding="utf-8"), encoding="utf-8")
+
+
 def attach_thumbs(items):
     for i in items:
         f = THUMBS / f"{i['id']}.webp"
@@ -158,6 +175,7 @@ def main():
     offline = "--offline" in sys.argv
     catalog = json.loads((ROOT / "catalog.json").read_text(encoding="utf-8"))
     items = catalog["items"]
+    publish_pages(catalog.get("pages", []))
 
     vercel, repos = {}, {}
     if not offline:

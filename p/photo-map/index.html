@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<meta charset="utf-8">
+<title>ベアフット店舗フォトマップ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap">
+
+<style>
+  :root{
+    --bg:#F2EDE3; --surface:#FBF8F1; --surface-2:#EAE3D5;
+    --ink:#1A1611; --ink-2:#4A4238; --muted:#7B7164;
+    --line:#DCD3C2; --line-strong:#C6BAA4;
+    --accent:#D9950A; --accent-soft:#F6E3B8;
+    --plan:#EFE8DA; --plan-line:#B9AC93; --wall:#E4AF2A; --wood:#D9C7A8;
+    --dark:#26221E; --glass:#8FB6C7;
+    --shadow:0 1px 2px rgba(26,22,17,.06), 0 8px 24px rgba(26,22,17,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#131110; --surface:#1C1917; --surface-2:#252119;
+      --ink:#F3EDE1; --ink-2:#CFC5B4; --muted:#948A7B;
+      --line:#302B24; --line-strong:#443D32;
+      --accent:#F0B429; --accent-soft:#3A2E12;
+      --plan:#1E1B17; --plan-line:#544C3E; --wall:#8A6A18; --wood:#6B5C42;
+      --dark:#0C0B09; --glass:#3D5A66;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#131110; --surface:#1C1917; --surface-2:#252119;
+    --ink:#F3EDE1; --ink-2:#CFC5B4; --muted:#948A7B;
+    --line:#302B24; --line-strong:#443D32;
+    --accent:#F0B429; --accent-soft:#3A2E12;
+    --plan:#1E1B17; --plan-line:#544C3E; --wall:#8A6A18; --wood:#6B5C42;
+    --dark:#0C0B09; --glass:#3D5A66;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+    font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1360px;margin:0 auto;padding:22px 20px 44px;}
+
+  header.top{
+    display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 28px;
+    padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;flex-direction:column;gap:4px;min-width:min(100%,320px);}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  }
+  h1{
+    font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+    font-weight:900;font-size:clamp(23px,3.2vw,32px);line-height:1.15;margin:0;
+    letter-spacing:-.01em;text-wrap:balance;
+  }
+  .sub{color:var(--muted);font-size:13px;max-width:62ch;margin:0;}
+  .topbar{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;align-items:center;}
+
+  .group{
+    display:flex;gap:2px;padding:3px;border-radius:8px;
+    background:var(--surface);border:1px solid var(--line);
+  }
+  button{
+    font:inherit;font-size:12px;color:var(--ink-2);background:transparent;border:0;
+    padding:6px 11px;border-radius:6px;cursor:pointer;white-space:nowrap;
+  }
+  button:hover{background:var(--surface-2);color:var(--ink);}
+  button[aria-pressed="true"]{background:var(--accent);color:#1A1200;font-weight:600;}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .btn-solid{
+    background:var(--accent);color:#1A1200;font-weight:600;border-radius:7px;
+    padding:7px 13px;border:1px solid color-mix(in srgb,var(--accent) 70%, #000);
+  }
+  .btn-solid:hover{background:var(--accent);filter:brightness(1.06);color:#1A1200;}
+  .btn-ghost{border:1px solid var(--line);border-radius:7px;padding:6px 11px;background:var(--surface);}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;}
+  @media (max-width:1000px){ .layout{grid-template-columns:minmax(0,1fr);} }
+
+  .card{
+    border:1px solid var(--line);border-radius:10px;background:var(--surface);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .card-h{
+    display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--line);
+    font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;font-size:13px;
+  }
+  .card-h .count{
+    margin-left:auto;font-family:"IBM Plex Mono",monospace;font-weight:400;
+    font-size:11px;color:var(--muted);
+  }
+
+  .planwrap{background:var(--plan);padding:10px;overflow-x:auto;}
+  svg.plan{display:block;width:100%;min-width:640px;height:auto;}
+  .pin{cursor:pointer;}
+  .pin circle.dot{fill:var(--accent);stroke:#1A1200;stroke-width:.03;}
+  .pin.on circle.dot{fill:#D0342C;stroke:#3A0F0B;}
+  .pin text{font-family:"IBM Plex Mono",monospace;font-size:.26px;fill:#1A1200;font-weight:600;}
+  .pin .cone{fill:var(--accent);opacity:.20;}
+  .pin.on .cone{fill:#D0342C;opacity:.30;}
+  .pin:hover .cone{opacity:.38;}
+
+  .viewer{position:relative;background:var(--dark);min-height:300px;display:grid;place-items:center;}
+  .viewer img{display:block;max-width:100%;max-height:min(66vh,620px);width:auto;object-fit:contain;}
+  .empty{
+    padding:38px 22px;text-align:center;color:#B9B1A3;max-width:46ch;
+  }
+  .empty b{display:block;color:#EDE6D8;font-size:14px;margin-bottom:6px;}
+  .empty p{font-size:12px;line-height:1.7;margin:0 0 14px;}
+  .cap{
+    display:flex;gap:12px;align-items:flex-start;padding:11px 14px;border-top:1px solid var(--line);
+    font-size:12.5px;color:var(--ink-2);
+  }
+  .cap .no{
+    font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:11px;
+    background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:2px 7px;flex:none;
+    border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+  }
+  .cap b{color:var(--ink);}
+  .cap .dir{margin-left:auto;flex:none;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);}
+
+  ul.shots{list-style:none;margin:0;padding:6px;display:flex;flex-direction:column;gap:2px;max-height:none;}
+  ul.shots li{margin:0;}
+  .shot{
+    width:100%;display:grid;grid-template-columns:22px 34px minmax(0,1fr);gap:9px;align-items:center;
+    text-align:left;padding:6px 7px;border-radius:7px;white-space:normal;
+  }
+  .shot:hover,.shot[aria-pressed="true"]{background:var(--surface-2);}
+  .shot .n{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .shot[aria-pressed="true"] .n{color:var(--accent);font-weight:600;}
+  .thumb{
+    width:34px;height:34px;border-radius:5px;background:var(--surface-2);
+    border:1px solid var(--line);object-fit:cover;display:block;
+  }
+  .thumb.ph{display:grid;place-items:center;font-size:9px;color:var(--muted);
+    font-family:"IBM Plex Mono",monospace;}
+  .shot .t{font-size:12px;color:var(--ink);line-height:1.4;}
+  .shot .s{font-size:10.5px;color:var(--muted);line-height:1.45;display:block;}
+
+  .note{padding:12px 14px;font-size:11.5px;color:var(--ink-2);line-height:1.65;}
+  .note + .note{border-top:1px solid var(--line);}
+  .note b{color:var(--ink);}
+  .tag{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+    letter-spacing:.08em;padding:1px 6px;border-radius:4px;margin-right:6px;vertical-align:1px;
+    background:transparent;color:var(--muted);border:1px dashed var(--line-strong);
+  }
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;padding:10px 14px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);}
+  .legend span{display:inline-flex;align-items:center;gap:5px;}
+  .sw{width:11px;height:11px;border-radius:3px;border:1px solid rgba(0,0,0,.2);display:inline-block;}
+  input[type=file]{display:none;}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Vibram FiveFingers &times; coollabo &nbsp;/&nbsp; Photo map</div>
+      <h1 data-en="Barefoot Store Photo Map">ベアフット店舗フォトマップ</h1>
+      <p class="sub" data-en="The same floor plan as the 3D layout, keyed to where each photo was taken and which way the camera faced. Load your photos into the slots to see the real store against the plan.">3Dレイアウトと同じ平面に、各写真の撮影位置と向きを落としたものです。スロットに写真を読み込むと、平面と実写を突き合わせて見られます。</p>
+    </div>
+    <div class="topbar">
+      <button class="btn-solid" id="loadAll" data-en="Load photos (in order)">写真をまとめて読み込む</button>
+      <button class="btn-ghost" id="clearAll" data-en="Clear">消去</button>
+      <div class="group" id="langs">
+        <button data-lang="ja" aria-pressed="true">日本語</button>
+        <button data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div class="card">
+        <div class="card-h"><span data-en="Shooting positions">撮影位置</span>
+          <span class="count" id="planCount"></span></div>
+        <div class="planwrap"><svg class="plan" id="plan" viewBox="-0.8 -0.9 13.1 7.0" role="img"></svg></div>
+        <div class="legend" id="legend"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><span data-en="Photo">写真</span>
+          <span class="count" id="viewCount"></span></div>
+        <div class="viewer" id="viewer"></div>
+        <div class="cap" id="cap"></div>
+      </div>
+    </div>
+
+    <aside style="display:flex;flex-direction:column;gap:18px;">
+      <div class="card">
+        <div class="card-h"><span data-en="Shot list">ショット一覧</span>
+          <span class="count" id="listCount"></span></div>
+        <ul class="shots" id="shots"></ul>
+      </div>
+
+      <div class="card">
+        <div class="card-h" data-en="About this page">この資料について</div>
+        <div class="note" data-en="&lt;b&gt;Photos stay on your device.&lt;/b&gt; Files you load are downscaled in the browser and kept in this browser's local storage only — they are never uploaded, and they are not part of the shared page. Anyone you share the link with sees the plan with empty slots until they load their own copies.">
+          <b>写真は端末内に保持されます。</b>読み込んだ画像はブラウザ内で縮小して保存され、アップロードはされません。共有相手の画面ではスロットは空のままです。恒久的に埋め込みたい場合は、写真をフォルダに置いてパスを教えてください。
+        </div>
+        <div class="note" data-en="&lt;span class=&quot;tag&quot;&gt;ESTIMATE&lt;/span&gt;Camera positions and view cones are inferred from what each photo shows, matched against the 3D layout. They mark roughly where you stood, not a survey.">
+          <span class="tag">推定</span>撮影位置と画角は、写っている什器を3Dレイアウトと突き合わせて割り出したものです。おおよその立ち位置を示すもので、実測ではありません。
+        </div>
+        <div class="note" data-en="&lt;b&gt;Plan orientation.&lt;/b&gt; Left edge = front facade with the yellow display posts. Bottom edge = the long glass side with the entrance. Right edge = the rear wall.">
+          <b>平面の向き。</b>左端＝黄色いディスプレイのある正面ファサード、下端＝入口のある長辺ガラス、右端＝奥壁です。
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<input type="file" id="fileOne" accept="image/*">
+<input type="file" id="fileMany" accept="image/*" multiple>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ============================================================
+     平面（3Dレイアウトと同じ寸法）  px = 奥行き(0=正面ファサード) / py = 幅(0=レジ側, 5.2=入口のガラス側)
+     ============================================================ */
+  const W = 11.5, H = 5.2;
+  const FIX = [
+    // [x, y, w, h, fill, stroke?]
+    {x:0, y:0, w:W, h:H, f:"floor"},
+    // 什器
+    {x:0.06, y:0.85, w:2.34, h:0.65, f:"wood", l:"counter"},
+    {x:0.35, y:0.00, w:2.45, h:0.11, f:"slat", l:"coollabo"},
+    {x:2.58, y:1.02, w:0.50, h:0.52, f:"blue", l:"knock"},
+    {x:3.90, y:1.55, w:4.12, h:0.10, f:"peg",  l:"mainwall"},
+    {x:3.90, y:1.65, w:4.12, h:0.92, f:"wood", l:"maincounter"},
+    {x:3.90, y:0.00, w:4.12, h:1.55, f:"back", l:"backyard"},
+    {x:3.05, y:0.00, w:0.85, h:1.60, f:"alcove", l:"alcove"},
+    {x:3.86, y:0.15, w:0.06, h:0.80, f:"dark", l:"curtain"},
+    {x:8.02, y:0.00, w:0.13, h:1.60, f:"dark", l:"endwall"},
+    {x:8.60, y:0.00, w:2.20, h:0.09, f:"amber", l:"history"},
+    {x:11.41,y:0.05, w:0.09, h:3.50, f:"peg",  l:"rearshelf"},
+    {x:11.36,y:3.55, w:0.14, h:1.20, f:"dark", l:"footwall"},
+    {x:1.28, y:4.48, w:0.78, h:0.66, f:"wood", l:"chest"},
+    {x:3.68, y:4.58, w:0.46, h:0.46, f:"dark2", l:"otto"},
+    {x:4.43, y:4.58, w:0.46, h:0.46, f:"dark2", l:"otto"},
+    // 柱
+    {x:0.45, y:4.50, w:0.70, h:0.70, f:"amber", l:"mircol"},
+    {x:3.40, y:4.90, w:0.12, h:0.30, f:"amber", l:"slimcol"},
+    {x:8.35, y:4.50, w:0.65, h:0.70, f:"amber", l:"col"},
+    // 黄色いディスプレイ2本
+    {x:0.16, y:2.16, w:0.10, h:0.10, f:"amber", l:"post"},
+    {x:0.16, y:3.41, w:0.10, h:0.10, f:"amber", l:"post"}
+  ];
+  const GLASS = [
+    {x:0.00, y:1.20, w:0.07, h:2.00},          // 正面ファサード
+    {x:0.00, y:5.13, w:0.35, h:0.07},          // 長辺（角側）
+    {x:0.35, y:5.13, w:0.10, h:0.07},          // 10cm
+    {x:1.15, y:5.13, w:1.10, h:0.07},          // 入口と同サイズ
+    {x:3.52, y:5.13, w:4.83, h:0.07},          // 構造柱まで1枚
+    {x:9.00, y:5.13, w:2.50, h:0.07}           // 足型の黒い壁まで
+  ];
+  const DOOR = {x:2.25, y:5.10, w:1.10, h:0.13};
+  const COL = {
+    floor:"var(--plan)", wood:"var(--wood)", slat:"#6E4B2E", blue:"#27409B",
+    peg:"#CFCBC0", back:"#D9D2C4", alcove:"#E7E0D0", dark:"var(--dark)",
+    dark2:"#2A2622", amber:"var(--wall)"
+  };
+
+  /* ============================================================
+     ショット定義  p=[px,py] / a=向き(度, 0=右) / fov=画角(度)
+     ============================================================ */
+  const SHOTS = [
+    {n:1, p:[2.60,2.60], a:84,  fov:66,
+     t:"入口を内側から", s:"イエロー構造柱・ガラスドア・シューズチェスト・姿見・Vibramのブロック椅子",
+     te:"Entrance from inside", se:"Yellow structural column, glass door, shoe chest, mirror, Vibram block stool"},
+    {n:2, p:[9.30,1.95], a:-69, fov:64,
+     t:"奥のコーナー", s:"History of Vibram の黄色い壁、右にソックス棚と在庫棚、左にスニーカー壁",
+     te:"Back corner", se:"History of Vibram yellow wall, sock and stock shelving to the right, sneaker wall to the left"},
+    {n:3, p:[2.60,3.80], a:-9,  fov:62,
+     t:"入口から奥への通路", s:"左にメイン商品棚、右に長辺のガラス、正面奥に足型の黒い壁",
+     te:"Aisle from the door", se:"Main product wall on the left, long glass side on the right, black footprint wall straight ahead"},
+    {n:4, p:[4.80,3.00], a:163, fov:68,
+     t:"レジ側から入口方向", s:"ドア・シューズチェスト・姿見・黄色いディスプレイ2本、右にレジ",
+     te:"Toward the door from the counter", se:"Door, shoe chest, mirror, the two yellow display posts, counter on the right"},
+    {n:5, p:[1.00,2.80], a:-35, fov:66,
+     t:"coollabo と Knockaround", s:"木目のcoollaboウォール、右奥にバックヤードのくぼみと黒カーテン",
+     te:"coollabo & Knockaround", se:"Wood coollabo wall, the backyard alcove and black curtain beyond to the right"},
+    {n:6, p:[3.45,0.60], a:0,   fov:56,
+     t:"バックヤード内部", s:"両側の5段ラック、脚立とスツール（カーテンを開けた状態）",
+     te:"Inside the backyard", se:"Five-tier racks on both sides, step ladder and stool, curtain held open"},
+    {n:7, p:[9.45,3.60], a:24,  fov:62,
+     t:"足型の黒い壁", s:"左にソックス棚と下段の在庫棚、右は長辺のガラス",
+     te:"Black footprint wall", se:"Sock shelf and lower stock shelving to the left, long glass side to the right"},
+    {n:8, p:[6.00,3.70], a:-90, fov:58,
+     t:"メイン商品棚の正面", s:"ペグ7列×4段、上にアートボード2列、下にメインカウンター",
+     te:"Main product wall head-on", se:"7 × 4 pegboard, two rows of art boards above, main counter below"},
+    {n:9, p:[3.60,3.60], a:-132,fov:64,
+     t:"レジカウンター正面", s:"木目のcoollaboウォール、Knockaroundスタンド、左に黄色いディスプレイ",
+     te:"Counter head-on", se:"Wood coollabo wall, Knockaround stand, yellow display posts to the left"}
+  ];
+
+  const LEGEND = [
+    {c:"var(--wood)", t:"カウンター・木什器", te:"Counters & wood fixtures"},
+    {c:"#CFCBC0",     t:"商品棚（ペグ）",     te:"Product walls (pegboard)"},
+    {c:"var(--dark)", t:"黒い壁・カーテン",   te:"Black walls & curtain"},
+    {c:"var(--wall)", t:"黄色い柱・ディスプレイ", te:"Yellow columns & posts"},
+    {c:"#D9D2C4",     t:"バックヤード",       te:"Backyard"},
+    {c:"var(--glass)",t:"ガラス面",           te:"Glass"}
+  ];
+
+  /* ============================================================
+     描画
+     ============================================================ */
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.getElementById("plan");
+  let lang = "ja", sel = 1;
+  const photos = {};                       // n -> dataURL
+
+  const el = (n, a) => { const e = document.createElementNS(NS, n); for(const k in a) e.setAttribute(k, a[k]); return e; };
+
+  function drawPlan(){
+    svg.textContent = "";
+    // 床
+    svg.appendChild(el("rect", {x:0, y:0, width:W, height:H, fill:COL.floor,
+      stroke:"var(--plan-line)", "stroke-width":.05}));
+    // 什器
+    for(const f of FIX){
+      if(f.f === "floor") continue;
+      svg.appendChild(el("rect", {x:f.x, y:f.y, width:f.w, height:f.h,
+        fill:COL[f.f] || f.f, stroke:"rgba(0,0,0,.18)", "stroke-width":.018, rx:.04}));
+    }
+    // ガラス
+    for(const g of GLASS)
+      svg.appendChild(el("rect", {x:g.x, y:g.y, width:g.w, height:g.h,
+        fill:"var(--glass)", opacity:.75, rx:.02}));
+    // 入口ドア
+    svg.appendChild(el("rect", {x:DOOR.x, y:DOOR.y, width:DOOR.w, height:DOOR.h,
+      fill:"none", stroke:"var(--accent)", "stroke-width":.09}));
+    const dl = el("text", {x:DOOR.x + DOOR.w/2, y:DOOR.y + 0.52, "text-anchor":"middle",
+      "font-size":.30, fill:"var(--accent)", "font-weight":"600"});
+    dl.textContent = lang === "en" ? "ENTRANCE" : "入口";
+    dl.setAttribute("font-family", '"IBM Plex Mono", monospace');
+    svg.appendChild(dl);
+
+    // 主要什器の注記
+    const notes = lang === "en"
+      ? [[1.2,1.20,"Counter"],[6.0,2.15,"Main product wall"],[5.9,0.85,"Backyard"],
+         [9.7,0.42,"History of Vibram"],[10.9,2.0,"Rear wall shelving"],[2.85,1.30,"Knock."]]
+      : [[1.2,1.20,"レジ"],[6.0,2.15,"メイン商品棚"],[5.9,0.85,"バックヤード"],
+         [9.7,0.42,"History of Vibram"],[10.9,2.0,"奥壁の棚"],[2.85,1.30,"Knock."]];
+    for(const [x,y,t] of notes){
+      const n = el("text", {x, y, "text-anchor":"middle", "font-size":.26,
+        fill:"var(--muted)", "font-family":'"IBM Plex Sans JP", sans-serif'});
+      n.textContent = t; svg.appendChild(n);
+    }
+
+    // 撮影ピン
+    for(const s of SHOTS){
+      const g = el("g", {class:"pin" + (s.n === sel ? " on" : ""), "data-n":s.n,
+        role:"button", tabindex:"0"});
+      const R = 2.05, half = s.fov * Math.PI / 360, ang = s.a * Math.PI / 180;
+      const x1 = s.p[0] + R*Math.cos(ang - half), y1 = s.p[1] + R*Math.sin(ang - half);
+      const x2 = s.p[0] + R*Math.cos(ang + half), y2 = s.p[1] + R*Math.sin(ang + half);
+      g.appendChild(el("path", {class:"cone",
+        d:`M ${s.p[0]} ${s.p[1]} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} Z`}));
+      g.appendChild(el("circle", {class:"dot", cx:s.p[0], cy:s.p[1], r:.30}));
+      const t = el("text", {x:s.p[0], y:s.p[1] + .10, "text-anchor":"middle"});
+      t.textContent = s.n; g.appendChild(t);
+      g.addEventListener("click", () => select(s.n));
+      g.addEventListener("keydown", e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); select(s.n); } });
+      svg.appendChild(g);
+    }
+  }
+
+  function renderLegend(){
+    const w = document.getElementById("legend");
+    w.innerHTML = LEGEND.map(l =>
+      `<span><i class="sw" style="background:${l.c}"></i>${lang==="en"?l.te:l.t}</span>`).join("");
+  }
+
+  function renderList(){
+    const ul = document.getElementById("shots");
+    ul.innerHTML = "";
+    for(const s of SHOTS){
+      const li = document.createElement("li");
+      const th = photos[s.n]
+        ? `<img class="thumb" src="${photos[s.n]}" alt="">`
+        : `<span class="thumb ph">--</span>`;
+      li.innerHTML =
+        `<button class="shot" data-n="${s.n}" aria-pressed="${s.n===sel}">
+           <span class="n">${String(s.n).padStart(2,"0")}</span>
+           ${th}
+           <span><span class="t">${lang==="en"?s.te:s.t}</span>
+           <span class="s">${lang==="en"?s.se:s.s}</span></span>
+         </button>`;
+      ul.appendChild(li);
+    }
+    const n = Object.keys(photos).length;
+    const c = lang==="en" ? `${n} / ${SHOTS.length} loaded` : `${n} / ${SHOTS.length} 枚`;
+    document.getElementById("listCount").textContent = c;
+    document.getElementById("planCount").textContent =
+      lang==="en" ? `${SHOTS.length} positions` : `${SHOTS.length} 箇所`;
+  }
+
+  function renderViewer(){
+    const s = SHOTS.find(x => x.n === sel);
+    const v = document.getElementById("viewer");
+    if(photos[sel]){
+      v.innerHTML = `<img src="${photos[sel]}" alt="">`;
+    } else {
+      v.innerHTML = lang === "en"
+        ? `<div class="empty"><b>No photo in this slot</b>
+             <p>Load the photo taken from position ${sel}. It is downscaled in your browser and stored locally.</p>
+             <button class="btn-solid" id="loadOne">Load photo</button></div>`
+        : `<div class="empty"><b>このスロットは空です</b>
+             <p>撮影位置 ${sel} の写真を読み込んでください。ブラウザ内で縮小して端末に保存します。</p>
+             <button class="btn-solid" id="loadOne">写真を読み込む</button></div>`;
+      const b = document.getElementById("loadOne");
+      if(b) b.addEventListener("click", () => document.getElementById("fileOne").click());
+    }
+    const dirs = lang === "en"
+      ? ["→ deep end","↘","↓ glass side","↙","← facade","↖","↑ counter side","↗"]
+      : ["→ 奥へ","↘","↓ ガラス側","↙","← ファサード","↖","↑ レジ側","↗"];
+    const di = ((Math.round(s.a / 45) % 8) + 8) % 8;
+    document.getElementById("cap").innerHTML =
+      `<span class="no">${String(s.n).padStart(2,"0")}</span>
+       <span><b>${lang==="en"?s.te:s.t}</b> — ${lang==="en"?s.se:s.s}</span>
+       <span class="dir">${dirs[di]}</span>`;
+    document.getElementById("viewCount").textContent =
+      lang==="en" ? `position ${sel}` : `撮影位置 ${sel}`;
+  }
+
+  function select(n){
+    sel = n;
+    drawPlan(); renderList(); renderViewer();
+    document.querySelectorAll(".shot").forEach(b =>
+      b.setAttribute("aria-pressed", String(Number(b.dataset.n) === sel)));
+  }
+
+  document.getElementById("shots").addEventListener("click", e => {
+    const b = e.target.closest(".shot"); if(!b) return;
+    select(Number(b.dataset.n));
+  });
+
+  /* ---------- 写真の読み込み（端末内のみ） ---------- */
+  const MAXW = 1500;
+  function shrink(file){
+    return new Promise(res => {
+      const fr = new FileReader();
+      fr.onload = () => {
+        const im = new Image();
+        im.onload = () => {
+          const sc = Math.min(1, MAXW / Math.max(im.width, im.height));
+          const c = document.createElement("canvas");
+          c.width = Math.round(im.width * sc); c.height = Math.round(im.height * sc);
+          c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+          res(c.toDataURL("image/jpeg", .72));
+        };
+        im.onerror = () => res(null);
+        im.src = fr.result;
+      };
+      fr.onerror = () => res(null);
+      fr.readAsDataURL(file);
+    });
+  }
+  function save(){
+    try { localStorage.setItem("bfPhotoMap", JSON.stringify(photos)); }
+    catch(e){ /* 容量超過などは無視（表示は継続） */ }
+  }
+  function load(){
+    try {
+      const raw = localStorage.getItem("bfPhotoMap");
+      if(raw) Object.assign(photos, JSON.parse(raw));
+    } catch(e){ /* 読めなくても空で続行 */ }
+  }
+
+  document.getElementById("fileOne").addEventListener("change", async e => {
+    const f = e.target.files && e.target.files[0]; if(!f) return;
+    const d = await shrink(f); e.target.value = "";
+    if(!d) return;
+    photos[sel] = d; save(); renderList(); renderViewer();
+  });
+  document.getElementById("loadAll").addEventListener("click", () =>
+    document.getElementById("fileMany").click());
+  document.getElementById("fileMany").addEventListener("change", async e => {
+    const fs = [...(e.target.files || [])].sort((a,b) => a.name.localeCompare(b.name));
+    e.target.value = "";
+    for(let i = 0; i < fs.length && i < SHOTS.length; i++){
+      const d = await shrink(fs[i]);
+      if(d) photos[SHOTS[i].n] = d;
+      renderList();
+    }
+    save(); renderViewer();
+  });
+  document.getElementById("clearAll").addEventListener("click", () => {
+    for(const k of Object.keys(photos)) delete photos[k];
+    save(); renderList(); renderViewer();
+  });
+
+  /* ---------- 言語 ---------- */
+  function applyLang(){
+    document.querySelectorAll("[data-en]").forEach(e => {
+      if(e.dataset.ja === undefined) e.dataset.ja = e.innerHTML;
+      e.innerHTML = lang === "en" ? e.dataset.en : e.dataset.ja;
+    });
+    document.querySelectorAll("#langs button").forEach(b =>
+      b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    document.documentElement.lang = lang;
+    drawPlan(); renderLegend(); renderList(); renderViewer();
+  }
+  document.getElementById("langs").addEventListener("click", e => {
+    const b = e.target.closest("button"); if(!b || b.dataset.lang === lang) return;
+    lang = b.dataset.lang; applyLang();
+  });
+
+  load();
+  applyLang();
+})();
+</script>
+
+</body></html>

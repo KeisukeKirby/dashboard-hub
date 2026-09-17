@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>K Village 3Dレイアウト（写真ベース）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+JP:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap">
+
+<style>
+  :root{
+    --bg:#F2EDE3;
+    --surface:#FBF8F1;
+    --surface-2:#EAE3D5;
+    --ink:#1A1611;
+    --ink-2:#4A4238;
+    --muted:#7B7164;
+    --line:#DCD3C2;
+    --line-strong:#C6BAA4;
+    --accent:#D9950A;
+    --accent-soft:#F6E3B8;
+    --stage:#E6DECE;
+    --stage-2:#D8CDB8;
+    --shadow:0 1px 2px rgba(26,22,17,.06), 0 8px 24px rgba(26,22,17,.07);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#131110;
+      --surface:#1C1917;
+      --surface-2:#252119;
+      --ink:#F3EDE1;
+      --ink-2:#CFC5B4;
+      --muted:#948A7B;
+      --line:#302B24;
+      --line-strong:#443D32;
+      --accent:#F0B429;
+      --accent-soft:#3A2E12;
+      --stage:#171512;
+      --stage-2:#0F0E0C;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#131110;
+    --surface:#1C1917;
+    --surface-2:#252119;
+    --ink:#F3EDE1;
+    --ink-2:#CFC5B4;
+    --muted:#948A7B;
+    --line:#302B24;
+    --line-strong:#443D32;
+    --accent:#F0B429;
+    --accent-soft:#3A2E12;
+    --stage:#171512;
+    --stage-2:#0F0E0C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+    font-size:14px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1440px;margin:0 auto;padding:22px 20px 40px;}
+
+  header.top{
+    display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 28px;
+    padding-bottom:16px;margin-bottom:18px;border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;flex-direction:column;gap:4px;min-width:min(100%,320px);}
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  }
+  h1{
+    font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+    font-weight:900;font-size:clamp(24px,3.4vw,34px);line-height:1.15;margin:0;
+    letter-spacing:-.01em;text-wrap:balance;
+  }
+  .sub{color:var(--muted);font-size:13px;max-width:56ch;}
+  .facts{display:flex;gap:22px;flex-wrap:wrap;margin-left:auto;}
+  .fact{display:flex;flex-direction:column;gap:1px;}
+  .fact b{
+    font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:19px;
+    font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .fact span{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 336px;gap:18px;align-items:start;}
+  @media (max-width:980px){ .layout{grid-template-columns:minmax(0,1fr);} }
+
+  .stage-card{
+    position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;
+    background:var(--stage);box-shadow:var(--shadow);
+  }
+  canvas{display:block;width:100%;height:min(70vh,680px);touch-action:none;cursor:grab;}
+  @media (max-width:980px){ canvas{height:56vh;} }
+  canvas.dragging{cursor:grabbing;}
+
+  .toolbar{
+    position:absolute;left:12px;top:12px;right:12px;
+    display:flex;gap:8px;flex-wrap:wrap;pointer-events:none;
+  }
+  .group{
+    display:flex;gap:2px;padding:3px;border-radius:8px;pointer-events:auto;
+    background:color-mix(in srgb, var(--surface) 88%, transparent);
+    border:1px solid var(--line);backdrop-filter:blur(8px);
+  }
+  button{
+    font:inherit;font-size:12px;color:var(--ink-2);background:transparent;border:0;
+    padding:5px 10px;border-radius:6px;cursor:pointer;white-space:nowrap;
+  }
+  button:hover{background:var(--surface-2);color:var(--ink);}
+  button[aria-pressed="true"]{background:var(--accent);color:#1A1200;font-weight:600;}
+  button:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+
+  .hint{
+    position:absolute;right:12px;bottom:10px;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.04em;
+    color:var(--muted);background:color-mix(in srgb, var(--surface) 78%, transparent);
+    padding:3px 8px;border-radius:5px;border:1px solid var(--line);
+  }
+  .hint2{
+    position:absolute;right:12px;top:52px;pointer-events:none;
+    font-size:10.5px;color:var(--muted);background:color-mix(in srgb, var(--surface) 78%, transparent);
+    padding:3px 8px;border-radius:5px;border:1px solid var(--line);
+  }
+  @media (max-width:720px){ .hint2{display:none;} }
+  .compass{
+    position:absolute;left:12px;bottom:10px;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--muted);
+    background:color-mix(in srgb, var(--surface) 78%, transparent);
+    padding:3px 8px;border-radius:5px;border:1px solid var(--line);
+  }
+
+  aside{display:flex;flex-direction:column;gap:14px;}
+  .panel{
+    border:1px solid var(--line);border-radius:10px;background:var(--surface);
+    padding:14px 15px;box-shadow:var(--shadow);
+  }
+  .panel h2{
+    font-family:"Zen Kaku Gothic New",sans-serif;font-weight:700;font-size:13px;
+    margin:0 0 10px;letter-spacing:.02em;
+    display:flex;align-items:center;gap:8px;
+  }
+  .panel h2::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .zones{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;}
+  .zones li{margin:0;}
+  .zone{
+    width:100%;display:grid;grid-template-columns:12px minmax(0,1fr);gap:10px;align-items:start;
+    text-align:left;padding:7px 8px;border-radius:7px;white-space:normal;
+  }
+  .zone > span{min-width:0;}
+  .zone:hover,.zone[aria-pressed="true"]{background:var(--surface-2);}
+  .zone[aria-pressed="true"]{color:var(--ink);font-weight:inherit;}
+  .swatch{width:12px;height:12px;border-radius:3px;margin-top:4px;border:1px solid rgba(0,0,0,.15);}
+  .zname{font-size:12.5px;font-weight:600;color:var(--ink);display:block;line-height:1.4;}
+  .zitems{font-size:11px;color:var(--muted);line-height:1.5;}
+
+  dl.spec{margin:0;display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:12px;}
+  dl.spec dt{color:var(--muted);}
+  dl.spec dd{margin:0;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;text-align:right;}
+
+  .tag{
+    display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+    letter-spacing:.08em;padding:1px 6px;border-radius:4px;vertical-align:1px;margin-right:6px;
+  }
+  .tag.ok{background:var(--accent-soft);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);}
+  .tag.est{background:transparent;color:var(--muted);border:1px dashed var(--line-strong);}
+  .tag.diff{background:#E8443A18;color:#C0392B;border:1px solid #C0392B55;}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .tag.diff{background:#FF6B5E1F;color:#FF8A7A;border-color:#FF8A7A55;}
+  }
+  :root[data-theme="dark"] .tag.diff{background:#FF6B5E1F;color:#FF8A7A;border-color:#FF8A7A55;}
+  .notes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:12px;color:var(--ink-2);}
+  .notes li{line-height:1.55;}
+  .ask{
+    margin-top:10px;padding:10px 11px;border-radius:7px;background:var(--surface-2);
+    font-size:11.5px;color:var(--ink-2);line-height:1.6;border-left:2px solid var(--accent);
+  }
+  .ask b{color:var(--ink);font-weight:600;}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Vibram FiveFingers &times; coollabo &nbsp;/&nbsp; K Village &nbsp;/&nbsp; Photo-matched</div>
+      <h1 data-en="K Village 3D Layout (photo-matched)">K Village 3Dレイアウト（写真ベース）</h1>
+      <p class="sub" data-en="Rebuilt from 12 in-store photos and cross-checked against the pre-renovation model. Drag to rotate, scroll to zoom, tap a zone to isolate it.">店内写真12枚から起こし直し、改装前モデルと照合したパターン。ドラッグで回転、ホイールで拡大、ゾーンをタップで抽出。</p>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>5.2 &times; 11.5</b><span data-en="Sales floor (m)">売場 (m)</span></div>
+      <div class="fact"><b>60</b><span data-en="Total area m&sup2;">総面積 m&sup2;</span></div>
+      <div class="fact"><b>12</b><span data-en="Photos matched">照合した写真</span></div>
+      <div class="fact"><b>10</b><span data-en="Diffs vs. before">改装前との差分</span></div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="stage-card">
+      <canvas id="cv"></canvas>
+      <div class="toolbar">
+        <div class="group" id="views">
+          <button data-view="iso" aria-pressed="true" data-en="Iso">俯瞰</button>
+          <button data-view="door" data-en="From door">入口から</button>
+          <button data-view="fit" data-en="Main wall">メイン棚</button>
+          <button data-view="cash" data-en="Counter">レジから</button>
+          <button data-view="back" data-en="Rear wall">奥壁</button>
+          <button data-view="plan" data-en="Plan">平面図</button>
+        </div>
+        <div class="group" id="toggles">
+          <button data-tg="label" aria-pressed="true" data-en="Labels">名称</button>
+          <button data-tg="prod" aria-pressed="true" data-en="Products">商品</button>
+          <button data-tg="glass" aria-pressed="true" data-en="Glass">ガラス</button>
+          <button data-tg="ceil" aria-pressed="false" data-en="Ceiling">天井</button>
+        </div>
+        <div class="group" id="langs">
+          <button data-lang="ja" aria-pressed="true">日本語</button>
+          <button data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+      <div class="compass" id="compass"></div>
+      <div class="hint" data-en="Drag = rotate / Shift+drag = pan / Wheel = zoom">ドラッグ=回転 / Shift+ドラッグ=移動 / ホイール=ズーム</div>
+      <div class="hint2" data-en="Pick a zone to zoom in and see fixture names">ゾーンを選ぶと寄って什器名を表示</div>
+    </div>
+
+    <aside>
+      <div class="panel">
+        <h2 data-en="Zones">ゾーン</h2>
+        <ul class="zones" id="zonelist"></ul>
+      </div>
+
+      <div class="panel">
+        <h2 data-en="Differences vs. the pre-renovation model">改装前モデルとの差分</h2>
+        <ul class="notes">
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;CHANGED&lt;/span&gt;&lt;b&gt;Backyard entry.&lt;/b&gt; The black curtain sits in the same plane as the main product wall, at its front end, facing straight into the aisle — you walk in, you do not step into an alcove and turn right (photos 3, 5)."><span class="tag diff">差分</span><b>バックヤード入口。</b>黒カーテンはメイン商品棚と同じ面の手前端にあり、通路に正対。くぼみに入って右に曲がる形ではなく、まっすぐ入る（写真3・5）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;CHANGED&lt;/span&gt;&lt;b&gt;There is a door mat.&lt;/b&gt; Black mat with a green footprint and the yellow Vibram oval, just inside the door (photos 1, 3)."><span class="tag diff">差分</span><b>玄関マットは有る。</b>黒地に緑の足型＋黄色いVibramロゴのマットがドアのすぐ内側（写真1・3）。改装前モデルでは「無し」としていた。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;CHANGED&lt;/span&gt;&lt;b&gt;Three yellow display posts&lt;/b&gt; stand in front of the facade glass, not two (photos 4, 8)."><span class="tag diff">差分</span><b>正面ガラス前の黄色いディスプレイは3本。</b>改装前モデルは2本だった（写真4・8）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;CHANGED&lt;/span&gt;&lt;b&gt;The wall segment between the coollabo wall and the main shelf is black&lt;/b&gt; and carries the backyard opening (photo 5)."><span class="tag diff">差分</span><b>coollaboウォールとメイン商品棚の間は黒い壁</b>で、そこにバックヤード開口がある（写真5）。</li>
+          <li data-en="&lt;span class=&quot;tag ok&quot;&gt;CONFIRMED&lt;/span&gt;&lt;b&gt;Two different black walls.&lt;/b&gt; The one at the far end of the main shelf carries the vibram logo and an outline footprint pattern (photos 11, 12); the one at the rear corner by the glass carries the large solid yellow footprint (photos 6, 9)."><span class="tag ok">確認済</span><b>黒い壁は2枚で柄が違う。</b>棚の奥端＝vibramロゴ＋足型アウトライン柄（写真11・12）／奥壁の角＝大きなソリッドの足型（写真6・9）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;ADDED&lt;/span&gt;&lt;b&gt;coollabo wall detail.&lt;/b&gt; Wood slats with the coollabo Outdoor sign, a monitor below it and an air conditioner above (photos 5, 9)."><span class="tag diff">追加</span><b>coollaboウォールの中身。</b>木ルーバーに coollabo Outdoor サイン、その下にモニター、上にエアコン（写真5・9）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;ADDED&lt;/span&gt;&lt;b&gt;Counter front.&lt;/b&gt; The counter has a dark raised top and its face is packed with hanging accessories; a mannequin head with sunglasses sits on top (photos 4, 8)."><span class="tag diff">追加</span><b>レジ前面。</b>黒いカウンター上段＋前面びっしりの小物フック、天板にサングラス付きマネキンヘッド（写真4・8）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;ADDED&lt;/span&gt;&lt;b&gt;Rear wall top tiers&lt;/b&gt; are box shelves on bright yellow brackets, two rows (photos 2, 6)."><span class="tag diff">追加</span><b>奥壁の上2段</b>は蛍光イエローのブラケット棚に箱積み（写真2・6）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;ADDED&lt;/span&gt;&lt;b&gt;Three black display posts&lt;/b&gt; with yellow plates stand on the floor in front of the glass by the footprint wall (photos 6, 10)."><span class="tag diff">追加</span><b>足型の黒い壁の前に黒脚のディスプレイ台3本</b>（黄色い天板）がガラス際に並ぶ（写真6・10）。</li>
+          <li data-en="&lt;span class=&quot;tag diff&quot;&gt;ADDED&lt;/span&gt;&lt;b&gt;Stock boxes on the floor&lt;/b&gt; in front of the History of Vibram wall, plus black Vibram cube stools scattered through the floor (photos 2, 11, 12)."><span class="tag diff">追加</span><b>History of Vibram の前に在庫箱の平積み</b>、店内各所に黒いVibramキューブスツール（写真2・11・12）。</li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h2 data-en="Key dimensions (estimated)">主要寸法（推定）</h2>
+        <dl class="spec">
+          <dt data-en="Sales floor">売場</dt><dd>5.2 × 11.5 m</dd>
+          <dt data-en="Main product wall">メイン商品棚</dt><dd data-en="4.45 m / 7 × 4">幅 4.45 m / 7列×4段</dd>
+          <dt data-en="Backyard">バックヤード</dt><dd>1.6 × 5.35 m</dd>
+          <dt data-en="Curtain opening">カーテン開口</dt><dd>0.70 m</dd>
+          <dt data-en="Black wall (entry side)">黒い壁（入口側）</dt><dd>0.90 m</dd>
+          <dt data-en="Counter">レジカウンター</dt><dd>2.30 × 0.66 m</dd>
+          <dt data-en="Door mat">玄関マット</dt><dd>1.05 × 0.65 m</dd>
+          <dt data-en="Entrance door">入口ドア</dt><dd data-en="W 1.48 m (long side)">W 1.48 m（長辺側）</dd>
+          <dt data-en="Yellow display posts">黄色いディスプレイ</dt><dd data-en="3 posts / 0.60 m apart">3本 / 間隔 0.60 m</dd>
+          <dt data-en="Rear wall shelving">奥壁の棚</dt><dd data-en="3.50 m / 2+3+2">3.50 m / 上2段+靴下+下2段</dd>
+          <dt data-en="Main aisle">主通路幅</dt><dd data-en="approx. 2.4 m">約 2.4 m</dd>
+        </dl>
+        <div class="ask" data-en="&lt;b&gt;Still unmeasured:&lt;/b&gt;&lt;br&gt;1. Actual frontage and depth&nbsp; 2. Backyard depth (1.6 m assumed)&nbsp; 3. Where exactly the black wall starts and ends&nbsp; 4. Whether the curtain opening is flush or recessed">
+          <b>まだ実測できていない点：</b><br>
+          ① 間口と奥行きの実寸　② バックヤードの奥行き（1.6mと仮定）　③ 黒い壁の始まり・終わりの位置　④ カーテン開口がツラ面か少し引っ込んでいるか
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  /* ============================================================
+     店舗モデル  座標系: X=0(左壁/メイン棚側)→5.2(入口のある長辺ガラス)
+                        Z=0(正面ファサード)→11.5(奥壁) / Y=上
+     ※最後に mirrorX() で実際の見え方（入って左にレジ・棚）に合わせる
+     ============================================================ */
+  const M = { W: 5.2, D: 11.5, H: 3.0 };
+
+  const FX   = 1.60;            // メイン商品棚／黒い壁のパーティション面
+  const BY0  = 3.20, BY1 = 8.55;// バックヤードの前後
+  const CUR0 = 3.38, CUR1 = 4.08; // 黒カーテンの開口（通路に正対）
+  const MZ0  = 4.10, MZ1 = 8.55;// メイン商品棚
+  const HZ0  = 8.70, HZ1 = 11.00; // History of Vibram の壁
+
+  const C = {
+    floor:  ["#A9743F","#9E6A38","#B07C4A","#A37041"],
+    srFloor:"#8E7052",
+    ground: "#9A907F",
+    wallY:  "#E4AF2A",
+    mirror: "#C6D3D8",
+    wallBk: "#23201C",
+    amber:  "#EFAE12",
+    lime:   "#D6E23A",   // 蛍光イエローのブラケット
+    black:  "#221F1B",
+    wood:   "#DCC9A6",
+    woodTop:"#E8D9BB",
+    slat:   "#8A5F3A",
+    glass:  "#8FB6C7",
+    frame:  "#8D8A82",
+    kraft:  "#C79A62",
+    kraft2: "#B98C55",
+    peg:    "#E4E0D5",
+    white:  "#EFEDE6",
+    blue:   "#27409B",
+    steel:  "#9AA0A6",
+    mat:    "#22241F",
+    green:  "#3E7A5E",
+    ceil:   "#C08409",
+    lamp:   "#F5E7B8",
+    tv:     "#14263C"
+  };
+  const SHOE = ["#2A2A2E","#CBDC3F","#B3395C","#E6E1D5","#3E6E8C","#7E8590","#D8912B"];
+  const SOCK = ["#2C2C30","#4A4A50","#8C3A46","#2E5A7A","#C9C4B6","#6B6F52"];
+
+  const FACES = [];
+  const LABELS = [];
+
+  const shadeCache = new Map();
+  function hex2rgb(h){ return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
+  function rgb2hex(r,g,b){
+    const c = v => Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0");
+    return "#"+c(r)+c(g)+c(b);
+  }
+  function shade(h,f){
+    const k = h+"|"+f;
+    let v = shadeCache.get(k);
+    if(!v){ const [r,g,b]=hex2rgb(h); v = rgb2hex(r*f,g*f,b*f); shadeCache.set(k,v); }
+    return v;
+  }
+  const mixCache = new Map();
+  function mix(a,b,t){
+    const k=a+"|"+b+"|"+t;
+    let v=mixCache.get(k);
+    if(!v){ const A=hex2rgb(a),B=hex2rgb(b); v=rgb2hex(A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t,A[2]+(B[2]-A[2])*t); mixCache.set(k,v); }
+    return v;
+  }
+
+  function pushFace(p, n, color, o){
+    const DB = { ground:1.5, floor:1.5, wall:0.8, glass:0.8, ceil:0.8 };
+    const bias = o.db != null ? o.db
+               : (o.kind && DB[o.kind] != null) ? DB[o.kind]
+               : (o.g === "stock") ? 0.9 : 0;
+    FACES.push({
+      p, n, bias, c: color,
+      cen: [(p[0][0]+p[1][0]+p[2][0]+p[3][0])/4,
+            (p[0][1]+p[1][1]+p[2][1]+p[3][1])/4,
+            (p[0][2]+p[1][2]+p[2][2]+p[3][2])/4],
+      a: o.alpha != null ? o.alpha : 1,
+      g: o.g || "shell",
+      prod: !!o.prod,
+      kind: o.kind || null
+    });
+  }
+  function quad(p, n, color, o){ pushFace(p, n, color, o||{}); }
+
+  const SF = { top:1.08, bot:.42, px:.80, nx:.64, pz:.94, nz:.72 };
+  function box(o){
+    const x0=o.x, x1=o.x+o.w, y0=o.y||0, y1=(o.y||0)+o.h, z0=o.z, z1=o.z+o.d;
+    const c=o.color, op=o;
+    pushFace([[x0,y1,z0],[x1,y1,z0],[x1,y1,z1],[x0,y1,z1]], [0,1,0],  shade(c,SF.top), op);
+    if(y0>0.001) pushFace([[x0,y0,z0],[x0,y0,z1],[x1,y0,z1],[x1,y0,z0]], [0,-1,0], shade(c,SF.bot), op);
+    pushFace([[x1,y0,z0],[x1,y0,z1],[x1,y1,z1],[x1,y1,z0]], [1,0,0],  shade(c,SF.px), op);
+    pushFace([[x0,y0,z0],[x0,y1,z0],[x0,y1,z1],[x0,y0,z1]], [-1,0,0], shade(c,SF.nx), op);
+    pushFace([[x0,y0,z1],[x0,y1,z1],[x1,y1,z1],[x1,y0,z1]], [0,0,1],  shade(c,SF.pz), op);
+    pushFace([[x0,y0,z0],[x1,y0,z0],[x1,y1,z0],[x0,y1,z0]], [0,0,-1], shade(c,SF.nz), op);
+    if(o.label) LABELS.push({ p:[x0+o.w/2, y1+(o.lift||0.06), z0+o.d/2], t:o.label, g:o.g||"shell", pri:o.pri||2 });
+  }
+
+  /* ---------- 床 ---------- */
+  (function floor(){
+    const PB=1.0, gx0=-PB, gx1=M.W+PB;
+    const pad = (x,z,w,d) => box({x, z, w, d, y:-0.14, h:0.12, color:C.ground, g:"shell", kind:"ground"});
+    pad(gx0, -PB, gx1-gx0, PB);
+    pad(gx0, M.D, gx1-gx0, PB);
+    pad(gx0, 0, PB, M.D);
+    pad(M.W, 0, PB, M.D);
+
+    const pw = 0.19;
+    for(let i=0, x=0; x < M.W-1e-6; i++, x+=pw){
+      const w = Math.min(pw, M.W-x);
+      quad([[x,0,0],[x+w,0,0],[x+w,0,M.D],[x,0,M.D]], [0,1,0], C.floor[i%C.floor.length], {g:"shell", kind:"floor"});
+    }
+    quad([[0,0,BY0],[FX,0,BY0],[FX,0,BY1],[0,0,BY1]], [0,1,0], C.srFloor, {g:"stock", kind:"floor"});
+  })();
+
+  /* ---------- 壁 ---------- */
+  function wallX(x, z0, z1, nx, color, g){
+    quad([[x,0,z0],[x,0,z1],[x,M.H,z1],[x,M.H,z0]], [nx,0,0], color, {g:g||"shell", kind:"wall"});
+  }
+  function wallZ(z, x0, x1, nz, color, g){
+    quad([[x0,0,z],[x1,0,z],[x1,M.H,z],[x0,M.H,z]], [0,0,nz], color, {g:g||"shell", kind:"wall"});
+  }
+
+  wallX(0, 0, M.D, +1, C.wallY);          // 左の躯体壁（黄色）
+  wallZ(M.D, 0, M.W, -1, C.wallY);        // 奥壁
+  wallZ(0, 0, 1.20, +1, C.wallY);         // 正面ファサードの実壁（レジ側）
+  wallZ(0, 3.20, M.W, +1, C.wallY);       // 正面ファサードの実壁（角側）
+
+  // バックヤード（メイン商品棚と黒い壁の裏）
+  wallX(FX, BY0, BY1, -1, "#D6CFC1", "stock");
+  wallX(0,  BY0, BY1, +1, "#D6CFC1", "stock");
+  wallZ(BY0, 0, FX, +1, "#3A352E", "stock");
+  box({x:0, z:BY0-0.12, w:FX, d:0.12, y:0, h:M.H, color:C.wallBk, g:"cash"});   // レジ側から見える黒い壁の小口
+
+  // ★写真差分: メイン商品棚と同じ面にある黒い壁＋バックヤードのカーテン開口（通路に正対）
+  const BWx = FX - 0.02, BWw = 0.09;
+  box({x:BWx, z:BY0-0.12, w:BWw, d:(CUR0-BY0)+0.12, y:0, h:M.H, color:C.wallBk, g:"cash",
+       label:"黒い壁（バックヤード入口）", pri:1, lift:-1.1});
+  box({x:BWx, z:CUR1, w:BWw, d:MZ0-CUR1, y:0, h:M.H, color:C.wallBk, g:"cash"});
+  box({x:BWx, z:CUR0, w:BWw, d:CUR1-CUR0, y:2.28, h:M.H-2.28, color:C.wallBk, g:"cash"});
+  box({x:BWx+0.005, z:CUR0+0.01, w:0.035, d:CUR1-CUR0-0.02, y:0, h:2.28, color:"#141310", g:"stock",
+       label:"バックヤード入口（通路に正対する黒カーテン）", pri:1});
+  for(let i=0;i<7;i++)                                                          // カーテンのひだ
+    box({x:BWx-0.01, z:CUR0+0.04+i*0.09, w:0.02, d:0.045, y:0.05, h:2.20, color:"#0D0C0A", g:"stock"});
+
+  // 棚の奥端の黒い壁（vibram ロゴ＋足型アウトライン柄）
+  box({x:0, z:MZ1, w:FX, d:0.14, y:0, h:M.H, color:"#2A2520", g:"front",
+       label:"vibram ロゴの黒い壁", pri:1, lift:-0.9});
+  (function logoWall(){
+    const zf = MZ1 + 0.145, G = "front";
+    box({x:0.52, z:zf, w:0.56, d:0.02, y:2.02, h:0.30, color:C.amber, g:G});     // 八角ロゴ
+    box({x:0.60, z:zf, w:0.40, d:0.02, y:1.86, h:0.10, color:C.white, g:G});     // FIVEFINGERS
+    for(let r=0;r<7;r++) for(let i=0;i<3;i++){                                   // 小さいロゴの散らし
+      if((r+i)%2) continue;
+      box({x:0.18+i*0.50, z:zf, w:0.16, d:0.015, y:0.28+r*0.24, h:0.075, color:mix(C.amber,"#2A2520",.25), g:G});
+    }
+    for(let r=0;r<6;r++) for(let i=0;i<3;i++){                                   // 足型アウトライン
+      if((r+i)%2===0) continue;
+      box({x:0.30+i*0.48, z:zf, w:0.13, d:0.012, y:0.40+r*0.26, h:0.16, color:"#4A423A", g:G});
+    }
+  })();
+
+  /* ---------- ガラス ---------- */
+  function glassX(x, z0, z1, n){ quad([[x,0,z0],[x,0,z1],[x,2.85,z1],[x,2.85,z0]], [n,0,0], C.glass, {alpha:.24, g:"shell", kind:"glass"}); }
+  function glassZ(z, x0, x1, n){ quad([[x0,0,z],[x1,0,z],[x1,2.85,z],[x0,2.85,z]], [0,0,n], C.glass, {alpha:.24, g:"shell", kind:"glass"}); }
+  const DOOR0 = 2.25, DOOR1 = 3.73;
+  const SLIM0 = 3.78, SLIM1 = 3.90;
+  glassZ(0, 1.20, 3.20, +1);            // 隣店側の正面ガラス
+  glassX(M.W, 0.00, 0.35, -1);
+  glassX(M.W, 1.05, 1.15, -1);
+  glassX(M.W, 1.15, DOOR0, -1);
+  glassX(M.W, DOOR0, DOOR1, -1);        // 入口ドア
+  glassX(M.W, SLIM1, 8.35, -1);
+  glassX(M.W, 9.00, M.D, -1);
+  box({x:2.18, z:-0.04, w:0.05, d:0.05, y:0, h:2.85, color:C.frame, g:"shell"});
+  [DOOR0, DOOR1].forEach(z => box({x:M.W-0.05, z:z-0.03, w:0.07, d:0.06, y:0, h:2.5, color:C.frame, g:"entry"}));
+  box({x:M.W-0.05, z:DOOR0, w:0.07, d:DOOR1-DOOR0, y:2.45, h:0.09, color:C.frame, g:"entry"});
+  box({x:M.W-0.06, z:2.94, w:0.05, d:0.05, y:0.88, h:0.62, color:"#C9CCD0", g:"entry"});   // ハンドル
+  box({x:M.W-0.06, z:3.06, w:0.05, d:0.05, y:0.88, h:0.62, color:"#C9CCD0", g:"entry"});
+  box({x:M.W-0.055, z:1.35, w:0.03, d:0.62, y:1.20, h:0.86, color:"#E8C63C", g:"entry",     // プロモーションのポスター
+       label:"店頭プロモーションのポスター"});
+  box({x:M.W-0.06, z:1.42, w:0.02, d:0.20, y:1.62, h:0.28, color:"#C0392B", g:"entry"});
+  box({x:M.W-0.06, z:1.72, w:0.02, d:0.20, y:1.62, h:0.28, color:"#C0392B", g:"entry"});
+
+  /* ---------- 天井 ---------- */
+  quad([[0,M.H,0],[0,M.H,M.D],[M.W,M.H,M.D],[M.W,M.H,0]], [0,-1,0], C.ceil, {g:"shell", kind:"ceil"});
+  box({x:0, z:BY0, w:M.W, d:M.D-BY0, y:2.84, h:0.16, color:"#1E1B18", g:"shell", kind:"ceil"}); // 奥側の黒い折上げ
+  [1.35, 3.05, 4.55].forEach(x => {
+    box({x:x-0.03,z:0.6,w:0.06,d:M.D-1.4,y:2.86,h:0.07,color:C.black,g:"shell",kind:"ceil"});
+    for(let z=1.0; z<M.D-1.0; z+=1.35){
+      box({x:x-0.055,z:z,w:0.11,d:0.12,y:2.72,h:0.15,color:C.black,g:"shell",kind:"ceil"});
+      box({x:x-0.04,z:z+0.01,w:0.08,d:0.09,y:2.7,h:0.03,color:C.lamp,g:"shell",kind:"ceil"});
+    }
+  });
+  for(let z=1.1; z<M.D-0.8; z+=2.0){
+    [2.2, 3.9].forEach(x => box({x:x,z:z,w:0.22,d:0.22,y:2.95,h:0.04,color:"#BFD9E8",g:"shell",kind:"ceil"}));
+  }
+
+  /* ============================================================
+     ゾーン1: エントランス / ガラス面 (entry)
+     ============================================================ */
+  // 入口の左：イエロー構造柱＋前に姿鏡
+  box({x:4.50, z:0.35, w:0.70, d:0.70, y:0, h:M.H, color:C.amber, g:"entry", label:"イエロー柱＋姿鏡", pri:1, lift:-0.9});
+  box({x:4.40, z:0.42, w:0.09, d:0.06, y:0, h:0.06, color:"#17150F", g:"entry"});
+  box({x:4.40, z:0.94, w:0.09, d:0.06, y:0, h:0.06, color:"#17150F", g:"entry"});
+  box({x:4.42, z:0.40, w:0.06, d:0.60, y:0.06, h:2.06, color:"#17150F", g:"entry"});
+  box({x:4.39, z:0.45, w:0.03, d:0.50, y:0.13, h:1.92, color:C.mirror, g:"entry"});
+
+  // 入口の右：細い黄色い柱（メイン商品棚の左端と同位置）
+  box({x:4.90, z:SLIM0, w:0.30, d:SLIM1-SLIM0, y:0, h:M.H, color:C.amber, g:"entry", label:"細い黄色い柱"});
+  // 奥のイエロー構造柱
+  box({x:4.50, z:8.35, w:0.70, d:0.65, y:0, h:M.H, color:C.amber, g:"entry", label:"イエロー構造柱", pri:1, lift:-0.9});
+
+  // ★写真差分: 玄関マット（黒地に緑の足型＋黄色いロゴ）
+  box({x:4.28, z:2.55, w:0.65, d:1.05, y:0, h:0.014, color:C.mat, g:"entry", label:"玄関マット", pri:1});
+  box({x:4.36, z:2.66, w:0.15, d:0.30, y:0.014, h:0.004, color:C.green, g:"entry"});
+  for(let i=0;i<5;i++) box({x:4.36+i*0.028, z:3.00, w:0.022, d:0.05, y:0.014, h:0.004, color:C.green, g:"entry"});
+  box({x:4.62, z:2.94, w:0.20, d:0.26, y:0.014, h:0.004, color:C.amber, g:"entry"});
+  box({x:4.60, z:3.26, w:0.18, d:0.34, y:0.014, h:0.004, color:"#5A5F58", g:"entry"});
+
+  // シューズチェスト（ドアと正面ファサードの間・上に見本の靴）
+  box({x:4.44, z:1.18, w:0.72, d:0.92, y:0.11, h:0.62, color:C.wood, g:"entry", label:"木の引き出しチェスト"});
+  for(let r=0;r<2;r++) for(let i=0;i<3;i++)
+    box({x:4.42, z:1.26+i*0.28, w:0.03, d:0.24, y:0.18+r*0.28, h:0.24, color:mix(C.wood,"#8A7148",.45), g:"entry"});
+  [[4.56,1.26],[4.56,1.56],[4.56,1.86]].forEach((s,i)=>{
+    box({x:s[0], z:s[1], w:0.26, d:0.12, y:0.73, h:0.09, color:SHOE[(i+2)%SHOE.length], g:"entry", prod:true});
+  });
+
+  // 黒いブロック椅子（ガラス際・写真3）
+  [[4.58,4.28],[4.58,5.02]].forEach(s=>{
+    box({x:s[0], z:s[1], w:0.46, d:0.46, y:0, h:0.44, color:C.black, g:"entry", label:s[1]<4.5?"Vibram キューブスツール":null});
+    box({x:s[0]-0.005, z:s[1]+0.09, w:0.02, d:0.28, y:0.16, h:0.14, color:C.amber, g:"entry"});
+  });
+
+  // ★写真差分: 正面ガラス前の黄色いディスプレイ 3本
+  [1.60, 2.20, 2.80].forEach((x,i) => {
+    box({x:x, z:0.18, w:0.09, d:0.09, y:0, h:M.H, color:C.amber, g:"entry", label:i===1?"黄色いディスプレイ 3本":null, pri:1});
+    for(let r=0;r<4;r++){
+      box({x:x-0.06, z:0.19, w:0.22, d:0.26, y:0.55+r*0.55, h:0.03, color:C.amber, g:"entry"});
+      box({x:x-0.03, z:0.24, w:0.15, d:0.21, y:0.58+r*0.55, h:0.09, color:SHOE[(i*3+r)%SHOE.length], g:"entry", prod:true});
+    }
+  });
+
+  /* ============================================================
+     ゾーン2: レジ & coollabo (cash)
+     ============================================================ */
+  box({x:0.005, z:0.30, w:0.11, d:2.55, y:0, h:2.92, color:C.slat, g:"cash", label:"coollabo ウォール（木ルーバー）", pri:1, db:0.35});
+  for(let i=0;i<16;i++) box({x:0.11, z:0.34+i*0.155, w:0.02, d:0.085, y:0.05, h:2.82, color:mix(C.slat,"#3A2412",.4), g:"cash"});
+  // サインパネル（coollabo Outdoor）とモニター、上のエアコン
+  box({x:0.11, z:0.90, w:0.05, d:1.45, y:1.94, h:0.44, color:mix(C.slat,"#E8D4B4",.55), g:"cash", label:"coollabo サイン"});
+  box({x:0.165, z:1.06, w:0.02, d:0.86, y:2.06, h:0.19, color:C.white, g:"cash"});
+  box({x:0.165, z:1.94, w:0.02, d:0.30, y:2.00, h:0.11, color:"#2E6B4B", g:"cash"});
+  box({x:0.10, z:0.86, w:0.07, d:0.06, y:1.88, h:0.56, color:"#191714", g:"cash"});
+  box({x:0.10, z:2.29, w:0.07, d:0.06, y:1.88, h:0.56, color:"#191714", g:"cash"});
+  box({x:0.10, z:0.86, w:0.07, d:1.49, y:1.88, h:0.06, color:"#191714", g:"cash"});
+  box({x:0.10, z:0.86, w:0.07, d:1.49, y:2.38, h:0.06, color:"#191714", g:"cash"});
+  box({x:0.12, z:1.15, w:0.05, d:0.78, y:1.12, h:0.46, color:C.tv, g:"cash", label:"モニター"});
+  box({x:0.17, z:1.19, w:0.01, d:0.70, y:1.16, h:0.38, color:"#2A6FA8", g:"cash"});
+  box({x:0.06, z:1.10, w:0.34, d:1.02, y:2.50, h:0.34, color:"#EDEAE3", g:"cash", label:"エアコン"});
+  // サイズチャートの小棚
+  box({x:0.11, z:2.42, w:0.28, d:0.34, y:1.36, h:0.03, color:C.wood, g:"cash", label:"サイズチャート棚"});
+  box({x:0.11, z:2.42, w:0.28, d:0.34, y:1.70, h:0.03, color:C.wood, g:"cash"});
+
+  // レジカウンター（黒い上段＋前面フック什器）
+  box({x:0.86, z:0.30, w:0.66, d:2.30, y:0, h:0.92, color:C.wood, g:"cash", label:"レジカウンター", pri:1, db:0.35});
+  box({x:0.83, z:0.27, w:0.72, d:2.36, y:0.92, h:0.05, color:C.woodTop, g:"cash"});
+  box({x:0.90, z:0.40, w:0.55, d:2.05, y:0.97, h:0.30, color:"#1A1C20", g:"cash", label:"黒いカウンター上段", db:0.35});
+  box({x:0.94, z:0.62, w:0.07, d:0.44, y:1.27, h:0.30, color:"#0E1014", g:"cash"});
+  box({x:1.02, z:1.86, w:0.22, d:0.22, y:0.97, h:0.30, color:C.steel, g:"cash", prod:true, label:"マネキンヘッド"});
+  box({x:1.03, z:1.88, w:0.20, d:0.06, y:1.14, h:0.06, color:"#1F3A52", g:"cash", prod:true});
+  for(let r=0;r<4;r++) for(let i=0;i<8;i++)                                   // 前面の小物フック
+    box({x:1.53, z:0.36+i*0.26, w:0.03, d:0.19, y:0.20+r*0.19, h:0.16,
+         color:[ "#2E6FA8","#2A2C30","#4F8C5A","#3B4650" ][(r+i)%4], g:"cash", prod:true});
+
+  // Knockaround サングラススタンド（青い台＋白いペグ塔）
+  box({x:1.02, z:2.64, w:0.54, d:0.52, y:0, h:0.38, color:C.blue, g:"cash", label:"Knockaround スタンド", pri:1});
+  box({x:1.08, z:2.70, w:0.40, d:0.40, y:0.38, h:1.62, color:C.white, g:"cash", db:0.35});
+  box({x:1.07, z:2.68, w:0.42, d:0.44, y:2.00, h:0.20, color:C.blue, g:"cash"});
+  for(let r=0;r<6;r++) for(let i=0;i<2;i++)
+    box({x:1.47, z:2.74+i*0.19, w:0.05, d:0.15, y:0.62+r*0.20, h:0.06, color:SHOE[(r+i)%SHOE.length], g:"cash", prod:true});
+
+  /* ============================================================
+     ゾーン5: バックヤード (stock)
+     ============================================================ */
+  const RKZ0 = MZ0, RKZ1 = BY1 - 0.45, RKL = RKZ1 - RKZ0;   // メイン商品棚の裏
+  const RBZ  = BY1 - 0.41, RBW = FX - 0.50;                  // 黒い壁の裏
+  const RKN  = Math.floor(RKL / 0.23);
+  for(let r=0;r<5;r++){
+    box({x:FX-0.41, z:RKZ0, w:0.36, d:RKL, y:0.34+r*0.52, h:0.035, color:"#C9C2B2", g:"stock"});
+    for(let i=0;i<RKN;i++)
+      box({x:FX-0.40, z:RKZ0+0.03+i*0.23, w:0.34, d:0.21, y:0.375+r*0.52, h:0.14, color:(i+r)%3?C.kraft2:C.kraft, g:"stock", prod:true});
+    box({x:0.05, z:RBZ, w:RBW, d:0.36, y:0.34+r*0.52, h:0.035, color:"#C9C2B2", g:"stock",
+         label: r===2 ? "黒い壁の裏のラック" : null});
+    for(let i=0;i<4;i++)
+      box({x:0.08+i*0.26, z:RBZ+0.01, w:0.21, d:0.34, y:0.375+r*0.52, h:0.14, color:(i+r)%2?C.kraft:C.kraft2, g:"stock", prod:true});
+  }
+  // 入口すぐ内側の平積み（写真5）
+  for(let r=0;r<6;r++) box({x:0.98, z:CUR0-0.02, w:0.34, d:0.22, y:r*0.16, h:0.15, color:r%2?C.kraft:C.kraft2, g:"stock", prod:true});
+  box({x:0.52, z:BY0+0.55, w:0.36, d:0.36, y:0.42, h:0.04, color:"#EDE9E2", g:"stock", label:"バックヤード（棚の裏）", pri:1});
+  box({x:0.66, z:BY0+0.69, w:0.08, d:0.08, y:0, h:0.42, color:"#B9B4AB", g:"stock"});
+  box({x:0.55, z:6.90, w:0.42, d:0.42, y:0, h:0.06, color:"#D8D6D2", g:"stock"});
+  for(let i=0;i<3;i++) box({x:0.58, z:6.93, w:0.36, d:0.24, y:0.28+i*0.26, h:0.04, color:"#D8D6D2", g:"stock"});
+
+  /* ============================================================
+     ゾーン4: メイン商品棚 (fit)
+     ============================================================ */
+  const FL = MZ1 - MZ0;
+  box({x:FX+0.01, z:MZ0, w:0.92, d:FL, y:0, h:0.93, color:C.wood, g:"fit", label:"メインカウンター"});
+  box({x:FX-0.01, z:MZ0-0.03, w:0.98, d:FL+0.06, y:0.93, h:0.06, color:C.woodTop, g:"fit"});
+  box({x:FX+0.06, z:MZ0-0.16, w:0.82, d:0.20, y:0, h:0.99, color:mix(C.wood,C.woodTop,.5), g:"fit"});   // 手前の丸い端部
+  box({x:FX+0.005, z:MZ0, w:0.03, d:FL, y:1.03, h:0.90, color:C.peg, g:"fit", label:"メイン商品棚 7列×4段", pri:1, db:0.35});
+  for(let col=0; col<7; col++) for(let r=0;r<4;r++){
+    box({x:FX+0.045, z:MZ0+0.50+col*0.53, w:0.055, d:0.26, y:1.11+r*0.21, h:0.105,
+         color:SHOE[(col*3+r)%SHOE.length], g:"fit", prod:true});
+    box({x:FX+0.04, z:MZ0+0.50+col*0.53, w:0.02, d:0.22, y:1.09+r*0.21, h:0.03, color:C.steel, g:"fit"});
+    box({x:FX+0.04, z:MZ0+0.44+col*0.53, w:0.02, d:0.13, y:1.05+r*0.21, h:0.035, color:"#2B2B2E", g:"fit", prod:true});
+  }
+  // 情報パネル（NATURE / MOVE FREELY）
+  box({x:FX+0.005, z:MZ0, w:0.035, d:FL, y:1.95, h:0.62, color:C.white, g:"fit", label:"情報パネル（MOVE FREELY）", db:0.35});
+  box({x:FX+0.02, z:MZ0+0.16, w:0.06, d:1.30, y:1.99, h:0.54, color:"#4A6B45", g:"fit"});
+  box({x:FX+0.02, z:MZ0+1.60, w:0.06, d:0.42, y:2.34, h:0.16, color:C.amber, g:"fit"});
+  [2.20, 2.80, 3.40].forEach(dz => box({x:FX+0.02, z:MZ0+dz, w:0.06, d:0.52, y:2.02, h:0.36, color:"#D9D5CA", g:"fit"}));
+  [2.20, 2.80, 3.40].forEach(dz => box({x:FX+0.02, z:MZ0+dz, w:0.06, d:0.52, y:1.98, h:0.05, color:C.amber, g:"fit"}));
+  // 上段バナー（OUTDOOR / INDOOR / 5 TOE SOCKS）
+  box({x:FX+0.005, z:MZ0, w:0.04, d:FL, y:2.59, h:0.34, color:"#26221D", g:"fit", db:0.35});
+  for(let i=0;i<6;i++){
+    box({x:FX+0.025, z:MZ0+0.08+i*0.72, w:0.05, d:0.64, y:2.63, h:0.22, color:i%2?"#3A362E":"#4A443A", g:"fit"});
+    box({x:FX+0.03, z:MZ0+0.08+i*0.72, w:0.05, d:0.64, y:2.85, h:0.05, color:C.amber, g:"fit"});
+  }
+  box({x:FX+0.005, z:MZ0, w:0.05, d:FL, y:2.93, h:0.07, color:"#1E1B18", g:"fit"});
+
+  /* ============================================================
+     ゾーン3: 奥（History ＋ 奥壁 ＋ 足型の黒い壁） (front)
+     ============================================================ */
+  // History of Vibram の黄色い壁パネル
+  box({x:0.005, z:HZ0, w:0.03, d:HZ1-HZ0, y:0.16, h:2.48, color:C.amber, g:"front", label:"History of Vibram", pri:1, db:0.35});
+  [[0.35,0.70],[1.20,0.62],[1.95,0.44]].forEach(t =>
+    box({x:0.04, z:HZ0+t[0], w:0.04, d:t[1], y:1.05, h:0.62, color:mix(C.amber,"#5A4A12",.35), g:"front"}));
+  box({x:0.04, z:HZ0+0.72, w:0.04, d:0.60, y:2.10, h:0.30, color:mix(C.amber,"#FFF6D8",.5), g:"front"});
+  box({x:0.02, z:HZ0+0.05, w:0.32, d:1.05, y:2.44, h:0.36, color:"#EDEAE3", g:"front", label:"エアコン"});
+  // 在庫箱の平積み（写真11）
+  for(let s=0;s<3;s++) for(let r=0;r<3;r++)
+    box({x:0.30+s*0.40, z:HZ1-1.35+s*0.10, w:0.36, d:0.52, y:r*0.13, h:0.12, color:(r+s)%2?C.kraft:C.kraft2, g:"front", prod:true});
+
+  // 奥壁：下2段の箱 → カウンター → 靴下ペグ → 上2段のイエローブラケット棚
+  const BW0 = 0.05, BW1 = 3.55, BWL = BW1 - BW0, BZ = M.D - 0.02;
+  box({x:BW0, z:M.D-0.48, w:BWL, d:0.46, y:0, h:0.10, color:C.wood, g:"front", label:"奥壁の商品棚（下2段）"});
+  for(let r=0;r<2;r++){
+    box({x:BW0, z:M.D-0.48, w:BWL, d:0.46, y:0.10+r*0.46, h:0.04, color:C.wood, g:"front", db:0.35});
+    for(let i=0;i<14;i++) box({x:BW0+0.06+i*0.24, z:M.D-0.44, w:0.21, d:0.34, y:0.14+r*0.46, h:0.14, color:(i+r)%2?C.kraft:C.kraft2, g:"front", prod:true});
+  }
+  box({x:BW0, z:M.D-0.52, w:BWL, d:0.50, y:1.02, h:0.05, color:C.woodTop, g:"front", db:0.35});
+  box({x:BW0+0.10, z:M.D-0.50, w:0.30, d:0.16, y:1.07, h:0.10, color:SHOE[0], g:"front", prod:true});
+  box({x:BW0+0.50, z:M.D-0.50, w:0.24, d:0.12, y:1.07, h:0.16, color:"#E8E4D8", g:"front", prod:true});
+  // 靴下ペグ（3段）
+  box({x:BW0, z:BZ, w:BWL, d:0.03, y:1.28, h:0.76, color:C.peg, g:"front", label:"5本指ソックスのペグ棚", pri:1, db:0.35});
+  for(let r=0;r<3;r++) for(let i=0;i<13;i++)
+    box({x:BW0+0.08+i*0.26, z:BZ-0.06, w:0.20, d:0.05, y:1.34+r*0.24, h:0.21, color:SOCK[(i+r*2)%SOCK.length], g:"front", prod:true});
+  // ★写真差分: 上2段はイエローブラケットのボックス棚
+  for(let r=0;r<2;r++){
+    box({x:BW0, z:M.D-0.54, w:BWL, d:0.52, y:2.08+r*0.44, h:0.045, color:C.lime, g:"front", db:0.35,
+         label:r?null:"イエローブラケットの箱棚（上2段）"});
+    for(let i=0;i<5;i++) box({x:BW0+0.02+i*0.70, z:M.D-0.56, w:0.05, d:0.54, y:2.08+r*0.44, h:0.34, color:C.lime, g:"front"});
+    for(let i=0;i<13;i++) box({x:BW0+0.08+i*0.26, z:M.D-0.50, w:0.23, d:0.38, y:2.125+r*0.44, h:0.15, color:(i+r)%2?C.kraft:C.kraft2, g:"front", prod:true});
+  }
+
+  // 奥壁の右端：大きな足裏デザインの黒い壁
+  box({x:3.55, z:M.D-0.14, w:1.20, d:0.14, y:0, h:2.92, color:C.black, g:"front", label:"Vibram 足型の黒い壁", pri:1});
+  (function footGraphic(){
+    const FXG = M.D - 0.16, G = "front";
+    const put = (x,w,y,h) => box({x:3.55+x, z:FXG, w:w, d:0.03, y:y, h:h, color:C.amber, g:G});
+    box({x:3.90, z:FXG, w:0.52, d:0.02, y:2.48, h:0.26, color:C.amber, g:G});
+    box({x:3.96, z:FXG, w:0.40, d:0.02, y:2.36, h:0.09, color:C.white, g:G});
+    [[0.16,0.15,1.86,0.20],[0.35,0.13,1.92,0.19],[0.52,0.12,1.90,0.18],[0.68,0.11,1.85,0.16],[0.83,0.10,1.78,0.14]]
+      .forEach(t => put(t[0], t[1], t[2], t[3]));
+    put(0.14, 0.82, 1.40, 0.42);
+    put(0.20, 0.68, 1.18, 0.24);
+    put(0.30, 0.42, 0.88, 0.32);
+    put(0.22, 0.60, 0.44, 0.44);
+    for(let i=0;i<7;i++) put(0.18+i*0.12, 0.05, 0.32-((i%3)*0.06), 0.05);
+  })();
+
+  // ★写真差分: ガラス際の黒脚ディスプレイ台3本（黄色い天板＋見本の靴）
+  [[4.62,9.85],[4.62,10.45],[4.62,11.02]].forEach((s,i)=>{
+    box({x:s[0]+0.13, z:s[1]+0.10, w:0.05, d:0.05, y:0, h:0.72, color:"#191714", g:"front"});
+    box({x:s[0], z:s[1], w:0.32, d:0.24, y:0.72, h:0.025, color:C.amber, g:"front",
+         label:i===1?"黒脚のディスプレイ台 3本":null});
+    box({x:s[0]+0.05, z:s[1]+0.04, w:0.20, d:0.14, y:0.745, h:0.10, color:SHOE[i%3], g:"front", prod:true});
+  });
+
+  // 店内に散る黒いキューブスツール（写真2・12）
+  [[2.25,9.30],[1.05,3.05]].forEach(s=>{
+    box({x:s[0], z:s[1], w:0.46, d:0.46, y:0, h:0.44, color:C.black, g:"front"});
+    box({x:s[0]+0.09, z:s[1]-0.005, w:0.28, d:0.02, y:0.16, h:0.14, color:C.amber, g:"front"});
+  });
+
+  /* ---- 向きの補正: 入口から入って「左」にレジ／メイン商品棚が来るようXを反転 ---- */
+  (function mirrorX(){
+    for(const f of FACES){
+      for(const q of f.p) q[0] = M.W - q[0];
+      f.n[0] = -f.n[0];
+      f.cen[0] = M.W - f.cen[0];
+    }
+    for(const L of LABELS) L.p[0] = M.W - L.p[0];
+  })();
+
+  /* ============================================================
+     レンダラ
+     ============================================================ */
+  const cv = document.getElementById("cv");
+  const ctx = cv.getContext("2d");
+  let Wd=0, Ht=0, dpr=1;
+
+  const cam = { az: 0.66, el: 0.60, dist: 15.5, fov: 42, tx: 3.10, ty: 0.9, tz: 5.6 };
+  const view = { label:true, prod:true, glass:true, ceil:false };
+  let lang = "ja";
+  const LBL_EN = {
+    "イエロー柱＋姿鏡":"Yellow column + mirror",
+    "細い黄色い柱":"Slim yellow column",
+    "イエロー構造柱":"Yellow structural column",
+    "黄色いディスプレイ 3本":"Yellow display posts ×3",
+    "玄関マット":"Door mat",
+    "木の引き出しチェスト":"Wooden drawer chest",
+    "Vibram キューブスツール":"Vibram cube stool",
+    "店頭プロモーションのポスター":"Store promotion poster",
+    "coollabo ウォール（木ルーバー）":"coollabo wall (wood slats)",
+    "coollabo サイン":"coollabo sign",
+    "モニター":"Monitor",
+    "エアコン":"Air conditioner",
+    "サイズチャート棚":"Size chart shelves",
+    "レジカウンター":"Counter",
+    "黒いカウンター上段":"Black counter riser",
+    "マネキンヘッド":"Mannequin head",
+    "Knockaround スタンド":"Knockaround stand",
+    "黒い壁（バックヤード入口）":"Black wall (backyard entry)",
+    "バックヤード入口（通路に正対する黒カーテン）":"Backyard entry — black curtain facing the aisle",
+    "黒い壁の裏のラック":"Rack behind the black wall",
+    "バックヤード（棚の裏）":"Backyard (behind the wall)",
+    "メインカウンター":"Main counter",
+    "メイン商品棚 7列×4段":"Main product wall — 7 × 4",
+    "情報パネル（MOVE FREELY）":"Info panel (MOVE FREELY)",
+    "vibram ロゴの黒い壁":"Black wall — vibram logo pattern",
+    "History of Vibram":"History of Vibram",
+    "奥壁の商品棚（下2段）":"Rear wall shelves (lower 2)",
+    "5本指ソックスのペグ棚":"Five-toe sock pegboard",
+    "イエローブラケットの箱棚（上2段）":"Box shelves on yellow brackets (top 2)",
+    "Vibram 足型の黒い壁":"Vibram footprint black wall",
+    "黒脚のディスプレイ台 3本":"Black display posts ×3"
+  };
+  const T = {
+    compass:{ ja:"モール側 ▶ 正面ファサード＋長辺のガラス面", en:"MALL ▶ front facade + long glass side" },
+    compassPlan:{ ja:"上=正面ファサード（黄色いディスプレイ側） / 左=入口のある長辺ガラス",
+                  en:"Top = front facade (display posts) / Left = long glass side with the door" }
+  };
+  const tr = k => T[k][lang];
+  let focus = null;
+
+  function lookFrom(eye, tgt, fov){   // 引数はモデル座標（X反転前）
+    eye = [M.W - eye[0], eye[1], eye[2]];
+    tgt = [M.W - tgt[0], tgt[1], tgt[2]];
+    const dx=eye[0]-tgt[0], dy=eye[1]-tgt[1], dz=eye[2]-tgt[2];
+    const d=Math.hypot(dx,dy,dz);
+    cam.dist=d; cam.el=Math.min(Math.asin(dy/d), 1.553); cam.az=Math.atan2(dx,dz);
+    cam.tx=tgt[0]; cam.ty=tgt[1]; cam.tz=tgt[2]; cam.fov=fov;
+  }
+  const VIEWS = {
+    iso:  () => lookFrom([12.0, 10.4, -4.6], [2.10, 0.9, 5.60], 42),
+    door: () => lookFrom([4.82, 1.62, 2.99], [1.55, 1.30, 5.40], 72),
+    fit:  () => lookFrom([4.40, 1.65, 6.30], [1.65, 1.40, 6.32], 62),
+    cash: () => lookFrom([4.05, 1.62, 3.60], [1.05, 1.20, 1.30], 68),
+    back: () => lookFrom([3.10, 1.70, 7.40], [1.40, 1.35, 11.30], 64),
+    plan: () => lookFrom([1.85, 32.0, 5.80], [1.85, 0, 5.75], 24)
+  };
+  const ZOOMS = {
+    entry: () => lookFrom([2.40, 1.75, 3.80], [5.05, 1.25, 1.20], 70),
+    front: () => lookFrom([3.30, 1.85, 8.10], [1.20, 1.30, 11.30], 66),
+    cash:  () => lookFrom([4.05, 1.62, 3.60], [1.05, 1.20, 1.30], 68),
+    fit:   () => lookFrom([4.40, 1.65, 6.30], [1.65, 1.40, 6.32], 62),
+    stock: () => lookFrom([-3.60, 2.70, 3.10], [0.80, 1.20, 5.90], 58),
+    shell: () => lookFrom([11.2, 10.2, -4.2], [1.85, 0.9, 5.60], 42)
+  };
+  VIEWS.iso();
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio||1, 1.75);
+    const r = cv.getBoundingClientRect();
+    Wd = Math.max(320, r.width); Ht = Math.max(240, r.height);
+    cv.width = Math.round(Wd*dpr); cv.height = Math.round(Ht*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    draw();
+  }
+
+  const drawn = [];
+  function css(v){ return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+
+  function draw(){
+    const stage = css("--stage") || "#E6DECE";
+    const stage2 = css("--stage-2") || stage;
+    const inkC = css("--ink") || "#000";
+    const surf = css("--surface") || "#fff";
+    const lineC = css("--line") || "#ccc";
+    const mutedC = css("--muted") || "#888";
+
+    const g = ctx.createLinearGradient(0,0,0,Ht);
+    g.addColorStop(0, stage); g.addColorStop(1, stage2);
+    ctx.fillStyle = g; ctx.fillRect(0,0,Wd,Ht);
+
+    const ce=Math.cos(cam.el), se=Math.sin(cam.el), ca=Math.cos(cam.az), sa=Math.sin(cam.az);
+    const eye=[cam.tx+cam.dist*ce*sa, cam.ty+cam.dist*se, cam.tz+cam.dist*ce*ca];
+    let fx=cam.tx-eye[0], fy=cam.ty-eye[1], fz=cam.tz-eye[2];
+    const fl=Math.hypot(fx,fy,fz); fx/=fl; fy/=fl; fz/=fl;
+    let rx=-fz, ry=0, rz=fx;
+    const rl=Math.hypot(rx,rz)||1; rx/=rl; rz/=rl;
+    const ux=ry*fz-rz*fy, uy=rz*fx-rx*fz, uz=rx*fy-ry*fx;
+    const f = (Ht/2)/Math.tan(cam.fov*Math.PI/360);
+
+    const list=[];
+    for(let i=0;i<FACES.length;i++){
+      const F=FACES[i];
+      if(!view.prod && F.prod) continue;
+      if(!view.glass && F.kind==="glass") continue;
+      if(!view.ceil && F.kind==="ceil") continue;
+      const cx=F.cen[0]-eye[0], cy=F.cen[1]-eye[1], cz=F.cen[2]-eye[2];
+      if(F.n[0]*cx + F.n[1]*cy + F.n[2]*cz >= 0) continue;
+      const depth = Math.sqrt(cx*cx+cy*cy+cz*cz) + F.bias;
+      list.push({F, depth});
+    }
+    list.sort((a,b)=> b.depth - a.depth);
+
+    ctx.lineJoin="round";
+    const NEAR=0.08;
+    const aX=[0,0,0,0], aY=[0,0,0,0], aZ=[0,0,0,0];
+    const bX=new Array(6), bY=new Array(6), bZ=new Array(6);
+    for(let i=0;i<list.length;i++){
+      const F=list[i].F;
+      for(let k=0;k<4;k++){
+        const p=F.p[k];
+        const dx=p[0]-eye[0], dy=p[1]-eye[1], dz=p[2]-eye[2];
+        aX[k]=dx*rx+dy*ry+dz*rz;
+        aY[k]=dx*ux+dy*uy+dz*uz;
+        aZ[k]=dx*fx+dy*fy+dz*fz;
+      }
+      let n=0;
+      for(let k=0;k<4;k++){
+        const a=k, b=(k+1)&3;
+        const za=aZ[a], zb=aZ[b];
+        const inA=za>=NEAR, inB=zb>=NEAR;
+        if(inA){ bX[n]=aX[a]; bY[n]=aY[a]; bZ[n]=za; n++; }
+        if(inA!==inB){
+          const t=(NEAR-za)/(zb-za);
+          bX[n]=aX[a]+(aX[b]-aX[a])*t;
+          bY[n]=aY[a]+(aY[b]-aY[a])*t;
+          bZ[n]=NEAR; n++;
+        }
+      }
+      if(n<3) continue;
+      let col=F.c, alpha=F.a;
+      if(focus && F.g!==focus && F.kind!=="ground" && F.kind!=="floor"){
+        col=mix(col, stage, .72);
+        if(F.kind==="wall") alpha*=.28;
+      }
+      ctx.beginPath();
+      for(let k=0;k<n;k++){
+        const px=Wd/2 + f*bX[k]/bZ[k], py=Ht/2 - f*bY[k]/bZ[k];
+        if(k===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+      }
+      ctx.closePath();
+      ctx.globalAlpha=alpha; ctx.fillStyle=col; ctx.fill();
+      if(F.kind==="glass"){ ctx.globalAlpha=.5; ctx.strokeStyle="#7E9BAA"; ctx.lineWidth=1; ctx.stroke(); }
+      ctx.globalAlpha=1;
+    }
+
+    if(view.label){
+      drawn.length=0;
+      const items=[];
+      for(const L of LABELS){
+        if(focus ? L.g!==focus : L.pri!==1) continue;
+        const dx=L.p[0]-eye[0], dy=L.p[1]-eye[1], dz=L.p[2]-eye[2];
+        const vz=dx*fx+dy*fy+dz*fz;
+        if(vz<=0.4) continue;
+        items.push({
+          x: Wd/2 + f*(dx*rx+dy*ry+dz*rz)/vz,
+          y: Ht/2 - f*(dx*ux+dy*uy+dz*uz)/vz,
+          d: vz, t: (lang==="en" && LBL_EN[L.t]) ? LBL_EN[L.t] : L.t
+        });
+      }
+      items.sort((a,b)=>a.d-b.d);
+      ctx.font='500 11px "IBM Plex Sans JP", system-ui, sans-serif';
+      ctx.textBaseline="middle";
+      for(const it of items){
+        if(it.x<-40||it.x>Wd+40||it.y<0||it.y>Ht) continue;
+        const w=ctx.measureText(it.t).width+13, h=18;
+        const bx=it.x-w/2, by=it.y-h-9;
+        let clash=false;
+        for(const r of drawn) if(bx<r[2]&&bx+w>r[0]&&by<r[3]&&by+h>r[1]){ clash=true; break; }
+        if(clash) continue;
+        drawn.push([bx,by,bx+w,by+h]);
+        ctx.globalAlpha=.94; ctx.fillStyle=surf;
+        roundRect(bx,by,w,h,5); ctx.fill();
+        ctx.globalAlpha=1; ctx.strokeStyle=lineC; ctx.lineWidth=1;
+        roundRect(bx,by,w,h,5); ctx.stroke();
+        ctx.fillStyle=inkC; ctx.textAlign="center"; ctx.fillText(it.t, it.x, by+h/2+.5);
+        ctx.strokeStyle=mutedC; ctx.globalAlpha=.55;
+        ctx.beginPath(); ctx.moveTo(it.x, by+h); ctx.lineTo(it.x, it.y-2); ctx.stroke();
+        ctx.globalAlpha=1;
+        ctx.beginPath(); ctx.arc(it.x, it.y, 2.2, 0, 6.2832); ctx.fillStyle=css("--accent")||"#D9950A"; ctx.fill();
+      }
+    }
+  }
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+
+  /* ---------- 操作 ---------- */
+  const ptrs=new Map();
+  let last=null, pinch=0;
+  cv.addEventListener("pointerdown", e=>{
+    cv.setPointerCapture(e.pointerId);
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY,shift:e.shiftKey});
+    last={x:e.clientX,y:e.clientY,shift:e.shiftKey||e.button===2};
+    cv.classList.add("dragging");
+  });
+  cv.addEventListener("pointermove", e=>{
+    if(!ptrs.has(e.pointerId)) return;
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(ptrs.size>=2){
+      const v=[...ptrs.values()];
+      const d=Math.hypot(v[0].x-v[1].x, v[0].y-v[1].y);
+      if(pinch) { cam.dist = clamp(cam.dist*(pinch/d), 1.6, 46); draw(); }
+      pinch=d; return;
+    }
+    const dx=e.clientX-last.x, dy=e.clientY-last.y;
+    last.x=e.clientX; last.y=e.clientY;
+    if(last.shift){
+      const s=cam.dist*0.0016;
+      const sa=Math.sin(cam.az), ca=Math.cos(cam.az);
+      cam.tx -= ( ca*dx*s); cam.tz -= (-sa*dx*s);
+      cam.ty += dy*s; cam.ty=clamp(cam.ty,-1,6);
+    }else{
+      cam.az -= dx*0.007;
+      cam.el = clamp(cam.el + dy*0.006, -0.32, 1.553);
+    }
+    draw();
+  });
+  function endPtr(e){
+    ptrs.delete(e.pointerId); if(ptrs.size<2) pinch=0;
+    if(ptrs.size===0) cv.classList.remove("dragging");
+  }
+  cv.addEventListener("pointerup", endPtr);
+  cv.addEventListener("pointercancel", endPtr);
+  cv.addEventListener("contextmenu", e=>e.preventDefault());
+  cv.addEventListener("wheel", e=>{
+    e.preventDefault();
+    cam.dist = clamp(cam.dist * (1 + Math.sign(e.deltaY)*0.10), 1.6, 46);
+    draw();
+  }, {passive:false});
+  function clamp(v,a,b){ return v<a?a:v>b?b:v; }
+
+  document.getElementById("views").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    [...e.currentTarget.children].forEach(c=>c.setAttribute("aria-pressed", String(c===b)));
+    VIEWS[b.dataset.view]();
+    planView = b.dataset.view==="plan";
+    document.getElementById("compass").textContent = tr(planView ? "compassPlan" : "compass");
+    draw();
+  });
+  document.getElementById("toggles").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b) return;
+    const k=b.dataset.tg; view[k]=!view[k];
+    b.setAttribute("aria-pressed", String(view[k]));
+    draw();
+  });
+
+  /* ---------- ゾーン一覧 ---------- */
+  const ZONES=[
+    {id:"entry", c:"#EFAE12",
+     n:"エントランス / ガラス面", i:"ガラスドア＋プロモポスター・玄関マット（緑の足型）・イエロー柱＋姿鏡・木の引き出しチェスト・細柱・正面ガラス前の黄色いディスプレイ3本・黒いキューブスツール2個",
+     ne:"Entrance / glass frontage", ie:"Glass door with promo poster, door mat with green footprint, yellow column with mirror, wooden drawer chest, slim column, three yellow display posts on the facade glass, two black cube stools"},
+    {id:"front", c:"#C79A62",
+     n:"奥（History＋奥壁）", i:"History of Vibram の黄色い壁＋エアコン＋箱の平積み・奥壁（下2段/靴下ペグ/イエローブラケットの箱棚2段）・足型の黒い壁・黒脚のディスプレイ台3本",
+     ne:"Back area (History + rear wall)", ie:"History of Vibram yellow wall with air conditioner and floor box stacks, rear wall (2 lower tiers / sock pegboard / 2 box shelves on yellow brackets), footprint black wall, three black display posts"},
+    {id:"cash",  c:"#27409B",
+     n:"レジ & coollabo", i:"木ルーバーの coollabo ウォール＋サイン＋モニター＋エアコン・黒い上段のレジカウンター・前面の小物フック・マネキンヘッド・Knockaroundスタンド・バックヤード入口の黒い壁",
+     ne:"Counter & coollabo", ie:"Wood-slat coollabo wall with sign, monitor and air conditioner, counter with black riser, accessory hooks on the face, mannequin head, Knockaround stand, black wall with the backyard entry"},
+    {id:"fit",   c:"#8FA83A",
+     n:"メイン商品棚", i:"ペグ7列×4段＋プライスタグ・MOVE FREELY の情報パネル・上段のOUTDOOR/INDOOR/5 TOE SOCKS バナー・丸い端部のメインカウンター",
+     ne:"Main product wall", ie:"7 × 4 pegboard with price tags, MOVE FREELY info panel, OUTDOOR / INDOOR / 5 TOE SOCKS banner strip above, main counter with a rounded end"},
+    {id:"stock", c:"#8A7B6A",
+     n:"バックヤード", i:"通路に正対する黒カーテンからまっすぐ入る・5段ラックは棚の裏と黒い壁の裏の2面・入口すぐの箱の平積み・脚立・スツール",
+     ne:"Backyard", ie:"Entered straight through the black curtain facing the aisle; five-tier racks behind the main wall and behind the black end wall; boxes stacked just inside, step ladder, stool"},
+    {id:"shell", c:"#7B7164",
+     n:"躯体・ガラス・天井", i:"2面のガラス・黄色い壁と天井・奥半分は黒い折上げ天井・ライティングレール＋青白のダウンライト",
+     ne:"Shell, glass & ceiling", ie:"Glass on two sides, yellow walls and ceiling, black dropped ceiling over the back half, lighting track plus cool-white downlights"}
+  ];
+  const ul=document.getElementById("zonelist");
+  function renderZones(){
+    ul.innerHTML = "";
+    ZONES.forEach(z=>{
+      const li=document.createElement("li");
+      li.innerHTML=`<button class="zone" data-z="${z.id}" aria-pressed="${focus===z.id}">
+        <span class="swatch" style="background:${z.c}"></span>
+        <span><span class="zname">${lang==="en"?z.ne:z.n}</span><span class="zitems">${lang==="en"?z.ie:z.i}</span></span></button>`;
+      ul.appendChild(li);
+    });
+  }
+  renderZones();
+  ul.addEventListener("click", e=>{
+    const b=e.target.closest(".zone"); if(!b) return;
+    const on = focus !== b.dataset.z;
+    focus = on ? b.dataset.z : null;
+    ul.querySelectorAll(".zone").forEach(x=>x.setAttribute("aria-pressed", String(x===b && on)));
+    if(on && ZOOMS[focus]){
+      ZOOMS[focus]();
+      document.querySelectorAll("#views button").forEach(x=>x.setAttribute("aria-pressed","false"));
+      planView = false;
+      document.getElementById("compass").textContent = tr("compass");
+    }
+    draw();
+  });
+
+  /* ---------- 言語切替 ---------- */
+  let planView = false;
+  function applyLang(){
+    document.querySelectorAll("[data-en]").forEach(el=>{
+      if(el.dataset.ja === undefined) el.dataset.ja = el.innerHTML;
+      el.innerHTML = (lang==="en") ? el.dataset.en : el.dataset.ja;
+    });
+    document.querySelectorAll("#langs button").forEach(b=>
+      b.setAttribute("aria-pressed", String(b.dataset.lang===lang)));
+    document.getElementById("compass").textContent = tr(planView ? "compassPlan" : "compass");
+    renderZones();
+    draw();
+  }
+  document.getElementById("langs").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b || b.dataset.lang===lang) return;
+    lang = b.dataset.lang;
+    applyLang();
+  });
+  applyLang();
+
+  window.addEventListener("resize", resize);
+  if(window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", draw);
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  resize();
+})();
+</script>
+
+</body></html>

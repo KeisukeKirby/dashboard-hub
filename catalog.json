@@ -2,8 +2,9 @@
   "githubOwner": "KeisukeKirby",
   "watchScopes": ["barefootinc-th"],
   "ignore": ["KeisukeKirby/dashboard-hub", "barefootinc-th/barefootinc-backroom"],
+  "pages": ["kv-after", "kv-texture", "kv-photo-matched", "kv-before", "store-3d-en", "photo-map", "kl-trip", "kl-trip-en"],
   "areas": [
-    { "id": "sales", "label": "販売・売上" },
+    { "id": "sales", "label": "販売・在庫" },
     { "id": "work", "label": "タスク・記録" },
     { "id": "store", "label": "店舗・売場" },
     { "id": "brand", "label": "ブランド・集客" },
@@ -37,21 +38,13 @@
       "repo": "KeisukeKirby/barefoot-my-sales-dashboard"
     },
     {
-      "id": "my-sales-artifact",
-      "name": "Barefoot Malaysia 販売実績(Artifact 版)",
-      "area": "sales", "kind": "dashboard", "country": ["MY"],
-      "summary": "同名の Vercel 版とは別に置いている Artifact。日次・曜日と時間帯・サイズとカラー・注文明細までタブで見られる。",
-      "url": "https://claude.ai/artifact/2cW3VBzYxRDjygcQ6myRhE",
-      "host": "artifact", "updated": "2026-09-14"
-    },
-    {
-      "id": "sales-h1-artifact",
-      "name": "販売実績ダッシュボード 2026年上期(Artifact 版)",
+      "id": "vff-stock",
+      "name": "VFF 在庫一覧",
       "area": "sales", "kind": "dashboard", "country": ["TH"],
-      "summary": "上期(1〜6月)ダッシュボードの Artifact 版。タブ構成は Vercel 版と同じ。",
-      "url": "https://claude.ai/artifact/B6bLaDksDWrfnqKyGtEX63",
-      "host": "artifact", "updated": "2026-08-18",
-      "flag": "8/18 から更新なし。Vercel 版にはその後、Siam Discovery の計上方法の修正や税抜表示への切替が入っているので、数字は Vercel 版を正とする"
+      "summary": "VFF シューズを SKU(モデル×カラー×サイズ)ごとに、在庫数・入荷予定・月平均販売・在庫月数・ステータスで一覧。月末の在庫表、販売明細、仕入先の梱包明細から集計。",
+      "url": "https://vff-stock-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/vff-stock-dashboard",
+      "repo": "KeisukeKirby/vff-stock-dashboard"
     },
     {
       "id": "bls-2026",
@@ -130,48 +123,54 @@
       "name": "K Village 改装後3Dイメージ",
       "area": "store", "kind": "3d", "country": ["TH"],
       "summary": "K Village 店の改装後の売場イメージを3Dで表示。",
-      "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x",
-      "host": "artifact", "updated": "2026-09-11"
+      "url": "https://barefootinc-backroom.vercel.app/p/kv-after/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/kv-after", "updated": "2026-09-11",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/B5Juy3jXNmmfBbcQxyJr4x" }]
     },
     {
       "id": "kv-texture",
       "name": "K Village 実写3Dレイアウト",
       "area": "store", "kind": "3d", "country": ["TH"],
       "summary": "店内写真を壁ごとに遠近補正して貼った、現状の売場の実写テクスチャ3D。",
-      "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb",
-      "host": "artifact", "updated": "2026-09-07"
+      "url": "https://barefootinc-backroom.vercel.app/p/kv-texture/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/kv-texture", "updated": "2026-09-07",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/VKh5JKmRvEsWYbfMjTewqb" }]
     },
     {
       "id": "kv-photo-matched",
       "name": "K Village 3Dレイアウト(写真ベース)",
       "area": "store", "kind": "3d", "country": ["TH"],
       "summary": "店内写真12枚から起こし直し、改装前モデルとの差分10件を注記した版。日英切替。",
-      "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi",
-      "host": "artifact", "updated": "2026-09-07"
+      "url": "https://barefootinc-backroom.vercel.app/p/kv-photo-matched/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/kv-photo-matched", "updated": "2026-09-07",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/6szeMg4xGDaoxNPd7EnPQi" }]
     },
     {
       "id": "kv-before",
       "name": "K Village 3Dレイアウト(改装前)",
       "area": "store", "kind": "3d", "country": ["TH"],
       "summary": "改装前の売場を什器単位で3D化したモデル。",
-      "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3",
-      "host": "artifact", "updated": "2026-09-07"
+      "url": "https://barefootinc-backroom.vercel.app/p/kv-before/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/kv-before", "updated": "2026-09-07",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/5qs3mo9EX1cFNeNREDPQR3" }]
     },
     {
       "id": "store-3d-en",
       "name": "Barefoot Store 3D Layout",
       "area": "store", "kind": "3d", "country": ["TH"],
       "summary": "店内写真9枚から起こした最初の3Dレイアウト(英語)。売場 5.2 × 11.5 m、ゾーン別の什器と推定寸法。",
-      "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484",
-      "host": "artifact", "updated": "2026-08-31"
+      "url": "https://barefootinc-backroom.vercel.app/p/store-3d-en/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/store-3d-en", "updated": "2026-08-31",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/UUBw1DNGwS3eGEhb3CQ484" }]
     },
     {
       "id": "photo-map",
       "name": "ベアフット店舗フォトマップ",
       "area": "store", "kind": "map", "country": ["TH"],
       "summary": "3Dレイアウトと同じ平面に、撮影位置9か所と向きを記入。写真を読み込むと平面と実写を並べて見られる(写真は端末内だけに保存)。",
-      "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou",
-      "host": "artifact", "updated": "2026-08-31"
+      "url": "https://barefootinc-backroom.vercel.app/p/photo-map/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/photo-map", "updated": "2026-08-31",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou" }]
     },
 
     {
@@ -227,9 +226,12 @@
       "name": "クアラルンプール出張報告",
       "area": "other", "kind": "report", "country": ["MY"],
       "summary": "クアラルンプール出張の報告書。日本語版と英語版の2本。",
-      "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2",
-      "host": "artifact", "updated": "2026-08-31",
-      "links": [{ "label": "English 版", "url": "https://claude.ai/artifact/16w3H5WaEvYoRVPCyHYP6C" }]
+      "url": "https://barefootinc-backroom.vercel.app/p/kl-trip/",
+      "host": "vercel", "slug": "barefootinc-backroom/p/kl-trip", "updated": "2026-08-31",
+      "links": [
+        { "label": "English 版", "url": "https://barefootinc-backroom.vercel.app/p/kl-trip-en/" },
+        { "label": "元の Artifact", "url": "https://claude.ai/artifact/61aAp5kxCB8LcxvQHzbea2" }
+      ]
     },
     {
       "id": "currency",

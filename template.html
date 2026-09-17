@@ -344,6 +344,7 @@
     return `${n}日前`;
   }
   function slugOf(i) {
+    if (i.slug) return i.slug;
     if (i.host === "artifact") return i.url.split("/").pop();
     return i.vercel || i.repo || "";
   }

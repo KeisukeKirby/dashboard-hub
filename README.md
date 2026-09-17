@@ -16,4 +16,5 @@ Barefoot Inc(タイ・マレーシア)向けに作ったダッシュボード・
 
 `index.html` と `artifact.html` は生成物なので直接編集しない。見た目は `template.html` で変える。
 
-Artifact(claude.ai)へのリンクは、claude.ai にログインした本人しか開けない。
+claude.ai の Artifact で作ったページは、`catalog.json` の `pages` に並べると `p/<id>/` に書き出されて Vercel で公開され、ログインなしで開ける。
+公開ページとこの一覧には noindex を付けている(検索には出ないが、URL を知っていれば誰でも読める)。
