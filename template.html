@@ -187,6 +187,10 @@
     display: flex; align-items: center; gap: 8px; min-height: 26px;
     font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3);
   }
+  .auto {
+    padding: 2px 5px; border: 1px dashed var(--line-strong); border-radius: 3px;
+    color: var(--ink-2); letter-spacing: .04em;
+  }
   .cc { display: inline-flex; gap: 4px; margin-left: auto; }
   .cc span { padding: 3px 5px; border: 1px solid var(--line); border-radius: 3px; color: var(--ink-2); letter-spacing: .04em; }
   .pin {
@@ -382,6 +386,7 @@
       ${thumb(i)}
       <div class="card-top">
         <span>${topLabel}</span>
+        ${i.auto ? '<span class="auto">自動追加</span>' : ""}
         <span class="cc">${(i.country || []).map((c) => `<span>${esc(c)}</span>`).join("")}</span>
         <button class="pin" type="button" data-pin="${esc(i.id)}" data-ctx="${ctx}" aria-pressed="${pinned}" aria-label="${pinned ? "よく使うから外す" : "よく使うに追加"}: ${esc(i.name)}">
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.6l1.95 3.95 4.35.63-3.15 3.07.74 4.34L8 11.54l-3.89 2.05.74-4.34L1.7 6.18l4.35-.63z"/></svg>

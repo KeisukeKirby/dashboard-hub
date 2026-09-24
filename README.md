@@ -5,6 +5,16 @@ Barefoot Inc(タイ・マレーシア)向けに作ったダッシュボード・
 
 公開 URL: https://barefootinc-backroom.vercel.app (Vercel チーム barefootinc-th / プロジェクト barefootinc-backroom)
 
+## 新しいダッシュボードの扱い
+
+Vercel チーム(barefootinc-th)に新しく公開したプロジェクトや、homepage を設定した GitHub リポジトリは、
+ビルドすると**自動で「新規(未分類)」に載る**(名前はページの `<title>`、説明は meta description から)。
+カードには「自動追加」と表示される。分野と説明を付けたいものは `catalog.json` の `items` に移し、
+載せたくないものは `ignore` に入れる。
+
+このPCの Windows タスク「Barefootinc Backroom refresh」が `refresh.ps1` を毎日実行し、
+新しいものを拾って公開状態を取り直し、生成物だけを main に push する(= Vercel が再デプロイする)。
+
 ## 更新のしかた
 
 1. `catalog.json` に項目を追加・修正する(名前・分野・説明は手書き)

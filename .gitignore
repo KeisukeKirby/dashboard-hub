@@ -1,3 +1,5 @@
 .vercel/
 __pycache__/
 artifact-src/
+refresh.log
+catalog.bak

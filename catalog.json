@@ -8,7 +8,8 @@
     { "id": "work", "label": "タスク・記録" },
     { "id": "store", "label": "店舗・売場" },
     { "id": "brand", "label": "ブランド・集客" },
-    { "id": "other", "label": "レポート・その他" }
+    { "id": "other", "label": "レポート・その他" },
+    { "id": "inbox", "label": "新規(未分類)" }
   ],
   "kinds": {
     "dashboard": "ダッシュボード",

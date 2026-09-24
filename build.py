@@ -2,19 +2,27 @@
 
 catalog.json is the hand-written source of truth (names, areas, summaries).
 This script only adds what goes stale: HTTP status, last deploy / push date,
-thumbnails, and a list of Vercel projects and GitHub repos that the catalog
-doesn't know yet.
+and thumbnails.
 
-    python build.py            # refresh status + dates, write index.html
-    python build.py --shots    # ...and retake thumbnails (headless Chrome, writes blocked)
-    python build.py --offline  # skip network, reuse dates written in catalog.json
+Anything live that the catalog doesn't list yet — a project in the watched
+Vercel scope, or a GitHub repo with a homepage — is added on its own under
+新規(未分類), named from the page's own <title>, so a new dashboard appears in
+the hub without anyone editing the catalog. Move it into "items" when it
+deserves a real area and summary.
+
+    python build.py             # refresh status + dates, write index.html
+    python build.py --shots     # ...and retake every thumbnail (headless Chrome, writes blocked)
+    python build.py --shots-new # ...only for cards that have no thumbnail yet (daily refresh)
+    python build.py --offline   # skip network, reuse dates written in catalog.json
 """
 import base64
 import concurrent.futures as cf
 import datetime as dt
 import hashlib
+import html
 import json
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -66,15 +74,26 @@ def iso_to_date(s):
     return dt.datetime.fromisoformat(s.replace("Z", "+00:00")).astimezone(BKK).date().isoformat()
 
 
-def http_status(url):
+def tag_text(pattern, page):
+    m = re.search(pattern, page, re.I | re.S)
+    return re.sub(r"\s+", " ", html.unescape(m.group(1))).strip() if m else ""
+
+
+def probe(url):
+    """One request per URL: status code, <title> and meta description."""
     req = urllib.request.Request(url, headers={"User-Agent": "dashboard-hub-check"})
     try:
         with urllib.request.urlopen(req, timeout=20) as res:
-            return res.status
+            head = res.read(200_000).decode(res.headers.get_content_charset() or "utf-8", "replace")
+            return (
+                res.status,
+                tag_text(r"<title[^>]*>(.*?)</title>", head),
+                tag_text(r'<meta[^>]+name="description"[^>]+content="([^"]*)"', head),
+            )
     except urllib.error.HTTPError as e:
-        return e.code
+        return e.code, "", ""
     except Exception:
-        return 0
+        return 0, "", ""
 
 
 def classify(item, code):
@@ -89,7 +108,7 @@ def classify(item, code):
     return "down"
 
 
-def take_shots(items):
+def take_shots(items, only_missing=False):
     from PIL import Image
 
     node = shutil.which("node")
@@ -101,6 +120,8 @@ def take_shots(items):
     for i in items:
         if i.get("archived"):
             continue
+        if only_missing and (THUMBS / f"{i['id']}.webp").exists():
+            continue  # keep the picture we have; re-encoding every day only churns the repo
         if i["status"] == "live":
             targets.append({"id": i["id"], "url": i["url"]})
         elif i["status"] == "artifact":
@@ -146,6 +167,69 @@ def take_shots(items):
             print(f"  thumb: {r['id']}" + (f"({'、'.join(notes)})" if notes else ""))
 
 
+def find_candidates(catalog, items, vercel, repos):
+    """Live URLs the catalog doesn't list: watched Vercel projects, repos with a homepage."""
+    ignore = set(catalog.get("ignore", []))
+    known_vercel = {i["vercel"] for i in items if i.get("vercel")} | ignore
+    known_repos = {i["repo"] for i in items if i.get("repo")} | ignore
+    seen = {(i.get("url") or "").rstrip("/") for i in items}
+    watch = tuple(f"{s}/" for s in catalog["watchScopes"])
+
+    out = []
+    for key, p in sorted(vercel.items()):
+        url = (p.get("latestProductionUrl") or "").rstrip("/")
+        if not key.startswith(watch) or key in known_vercel or not url or url in seen:
+            continue
+        seen.add(url)
+        out.append({"url": url, "vercel": key, "name": p["name"], "updated": ms_to_date(p["updatedAt"])})
+    for repo, meta in sorted(repos.items()):
+        url = (meta.get("homepageUrl") or "").rstrip("/")
+        if repo in known_repos or not url or url in seen:
+            continue
+        seen.add(url)
+        out.append({"url": url, "repo": repo, "name": repo.split("/")[1],
+                    "updated": iso_to_date(meta["pushedAt"])})
+    return out
+
+
+def guess_kind(name, title):
+    text = f"{name} {title}".lower()
+    if re.search(r"\blp\b|landing|guidance|catalog", text):
+        return "lp"
+    if re.search(r"dashboard|ダッシュボード|実績|分析|一覧|report|レポート", text):
+        return "dashboard"
+    return "app"
+
+
+def adopt_candidates(candidates, probes, repos):
+    """Cards for candidates that actually serve a page, so nothing new goes unlisted."""
+    repo_by_url = {
+        (m.get("homepageUrl") or "").rstrip("/"): r for r, m in repos.items() if m.get("homepageUrl")
+    }
+    found = []
+    for c in candidates:
+        code, title, desc = probes.get(c["url"], (0, "", ""))
+        if not (200 <= code < 400 or code in (401, 403)):
+            continue  # a homepage that no longer resolves is not a dashboard
+        item = {
+            "id": c["name"],
+            "name": title.split(" | ")[0].strip() or c["name"],
+            "area": "inbox",
+            "kind": guess_kind(c["name"], title),
+            "country": [],
+            "summary": desc or "自動で見つけたページ。分野と説明は catalog.json に書き足す。",
+            "url": c["url"],
+            "host": "vercel",
+            "repo": c.get("repo") or repo_by_url.get(c["url"]),
+            "updated": c["updated"],
+            "auto": True,
+        }
+        if c.get("vercel"):
+            item["vercel"] = c["vercel"]
+        found.append(item)
+    return found
+
+
 def publish_pages(page_ids):
     for page_id in page_ids:
         src = ARTIFACT_SRC / page_id / "index.html"
@@ -177,7 +261,7 @@ def main():
     items = catalog["items"]
     publish_pages(catalog.get("pages", []))
 
-    vercel, repos = {}, {}
+    vercel, repos, probes = {}, {}, {}
     if not offline:
         scopes = set(catalog["watchScopes"]) | {
             i["vercel"].split("/")[0] for i in items if i.get("vercel")
@@ -186,18 +270,21 @@ def main():
             for p in cli_json("vercel", "project", "ls", "--scope", scope, "--json")["projects"]:
                 vercel[f"{scope}/{p['name']}"] = p
         owner = catalog["githubOwner"]
-        for r in cli_json("gh", "repo", "list", owner, "--limit", "300", "--json", "name,pushedAt"):
-            repos[f"{owner}/{r['name']}"] = r["pushedAt"]
+        for r in cli_json("gh", "repo", "list", owner, "--limit", "300",
+                          "--json", "name,pushedAt,homepageUrl"):
+            repos[f"{owner}/{r['name']}"] = r
         for i in items:
             repo = i.get("repo")
             if repo and repo not in repos:
-                repos[repo] = cli_json("gh", "api", f"repos/{repo}")["pushed_at"]
+                r = cli_json("gh", "api", f"repos/{repo}")
+                repos[repo] = {"pushedAt": r["pushed_at"], "homepageUrl": r.get("homepage") or ""}
 
+        candidates = find_candidates(catalog, items, vercel, repos)
         urls = [i["url"] for i in items if i.get("url") and i.get("host") != "artifact"]
+        urls += [c["url"] for c in candidates if c["url"] not in urls]
         with cf.ThreadPoolExecutor(8) as pool:
-            codes = dict(zip(urls, pool.map(http_status, urls)))
-    else:
-        codes = {}
+            probes = dict(zip(urls, pool.map(probe, urls)))
+        items += adopt_candidates(candidates, probes, repos)
 
     for i in items:
         if not offline:
@@ -205,15 +292,16 @@ def main():
             if v:
                 i["updated"] = ms_to_date(v["updatedAt"])
             elif repos.get(i.get("repo", "")):
-                i["updated"] = iso_to_date(repos[i["repo"]])
-        code = codes.get(i.get("url"), 200 if offline else 0)
+                i["updated"] = iso_to_date(repos[i["repo"]]["pushedAt"])
+        code = 200 if offline else probes.get(i.get("url"), (0, "", ""))[0]
         i["httpStatus"] = code
         i["status"] = classify(i, code)
 
-    if "--shots" in sys.argv:
+    shots = {"--shots", "--shots-new"} & set(sys.argv)
+    if shots:
         if offline:
             raise RuntimeError("--shots は --offline と一緒に使えません(公開状態が必要)")
-        take_shots(items)
+        take_shots(items, only_missing=shots == {"--shots-new"})
     attach_thumbs(items)
 
     data = {
@@ -244,16 +332,11 @@ def main():
     for i in items:
         if i["status"] == "down" and not i.get("archived"):
             print(f"  ! 停止: {i['name']} ({i.get('url')}, HTTP {i['httpStatus']})")
-    if not offline:
-        known_v = {i["vercel"] for i in items if i.get("vercel")} | set(catalog.get("ignore", []))
-        known_r = {i["repo"] for i in items if i.get("repo")} | set(catalog.get("ignore", []))
-        watch = tuple(f"{s}/" for s in catalog["watchScopes"])
-        new_v = sorted(k for k in vercel if k.startswith(watch) and k not in known_v)
-        new_r = sorted(k for k in repos if k not in known_r)
-        if new_v or new_r:
-            print("カタログ未登録(catalog.json に追加するか ignore へ):")
-            for k in new_v + new_r:
-                print(f"  + {k}")
+    auto = [i for i in items if i.get("auto")]
+    if auto:
+        print("自動追加(分野・説明を付けるなら catalog.json の items へ、載せないなら ignore へ):")
+        for i in auto:
+            print(f"  + {i.get('vercel') or i.get('repo')} → {i['name']}")
 
 
 if __name__ == "__main__":
