@@ -59,12 +59,6 @@
       "repo": "KeisukeKirby/sales-record-baanlaesuan"
     },
     {
-      "id": "vft-csv", "archived": true, "name": "Vibram FiveFingers Thailand Sales",
-      "summary": "CSV を読み込んで月次売上を見る分析ツールだった。Vercel プロジェクト(vft-sales-analysis)が削除され、2026-10-06 時点で URL は 404。",
-      "url": "https://vibram-thailand-dashboard.vercel.app",
-      "repo": "KeisukeKirby/vibram-thailand-dashboard"
-    },
-    {
       "id": "edv-sales",
       "name": "EDV 販売実績ダッシュボード",
       "area": "sales", "kind": "dashboard", "country": ["TH"],
@@ -87,8 +81,8 @@
       "id": "store-stock",
       "name": "VFF Stock Dashboard",
       "area": "sales", "kind": "dashboard", "country": ["TH"],
-      "summary": "店舗在庫のダッシュボード。同じ URL の下に Business Memo(/memo)と Vivo Sales(/vivo)がある。",
-      "flag": "「VFF 在庫一覧」と役割が重なる。どちらを残すか未確認。元データの source.xlsx / source_office.xlsx が公開 URL でダウンロードできる状態",
+      "summary": "店舗在庫のダッシュボード。同じ URL の下に Business Memo(/memo)と Vivo Sales(/vivo)がある。「VFF 在庫一覧」とは併存(2026-10-06 に両方残すと決定)。",
+      "flag": "元データの source.xlsx / source_office.xlsx が公開 URL でダウンロードできる状態",
       "url": "https://stock-dashboard-six-umber.vercel.app",
       "host": "vercel", "vercel": "barefootinc-th/stock-dashboard",
       "repo": "KeisukeKirby/stock-dashboard"
@@ -146,12 +140,6 @@
       "repo": "KeisukeKirby/my-log"
     },
     {
-      "id": "personal-dashboard", "archived": true, "name": "My Dashboard",
-      "summary": "目標ボード・習慣トラッカー・旅行リスト(Supabase)。Vercel プロジェクトが削除され、2026-10-06 時点で URL は 404。",
-      "url": "https://personal-dashboard-kappa-eight.vercel.app",
-      "repo": "KeisukeKirby/personal-dashboard"
-    },
-    {
       "id": "thai-learning",
       "name": "Thai Learning Dashboard",
       "area": "work", "kind": "app", "country": [],
@@ -179,7 +167,7 @@
       "id": "training-plan",
       "name": "理想の身体に向けたトレーニングプログラム",
       "area": "work", "kind": "report", "country": [],
-      "summary": "トレーニング計画のまとめ(推定)。",
+      "summary": "トレーニング計画のまとめ(推定)。Claude Docs 形式のため、ここではプレビュー画像を作れない。",
       "url": "https://claude.ai/artifact/D4mUvPUUZfMPRAfvGnbRbA",
       "host": "artifact", "updated": "2026-09-22"
     },
@@ -250,7 +238,7 @@
       "id": "store-artwork",
       "name": "Barefoot 店舗アートワーク 改訂案",
       "area": "store", "kind": "report", "country": ["TH"],
-      "summary": "店舗アートワークの改訂案(推定)。",
+      "summary": "店舗アートワークの改訂案(推定)。Claude Design 形式のため、ここではプレビュー画像を作れない。",
       "url": "https://claude.ai/artifact/WDwAeETY7zEqVyZKMXWXre",
       "host": "artifact", "updated": "2026-09-28"
     },
@@ -346,7 +334,7 @@
       "id": "gear-guide",
       "name": "Osmo Action 5 Pro × DJI Mic Mini 機材ガイド",
       "area": "other", "kind": "guide", "country": [],
-      "summary": "撮影機材の設定ガイド(推定)。同じ名前の Artifact が2つある。",
+      "summary": "撮影機材の設定ガイド(推定)。Claude Slides 形式のため、ここではプレビュー画像を作れない。同じ名前の Artifact が2つある。",
       "url": "https://claude.ai/artifact/91qt9enhzvdyCrFq6UpmGM",
       "host": "artifact", "updated": "2026-09-28"
     },
@@ -357,34 +345,6 @@
       "summary": "テニス4大大会の準優勝者をまとめた資料(推定)。",
       "url": "https://claude.ai/artifact/S66dPGXoajGHF6W9MbiS43",
       "host": "artifact", "updated": "2026-09-16"
-    },
-
-    {
-      "id": "vibram-dashboard", "archived": true, "name": "vibram-dashboard",
-      "summary": "Next.js の初期テンプレートのまま。Vercel プロジェクトは削除済み。",
-      "url": "https://vibram-dashboard.vercel.app", "repo": "KeisukeKirby/vibram-dashboard"
-    },
-    {
-      "id": "vibram-hq-dashboard", "archived": true, "name": "vibram-hq-dashboard",
-      "summary": "Vibram HQ がタイの販促物を承認する画面の試作。Brand Compliance Dashboard の前身と推定。",
-      "url": "https://vibram-hq-dashboard.vercel.app", "repo": "KeisukeKirby/vibram-hq-dashboard"
-    },
-    {
-      "id": "test-internet", "archived": true, "name": "test-internet",
-      "summary": "動作確認用。Vercel プロジェクトは削除済み。",
-      "url": "https://test-internet.vercel.app", "repo": "KeisukeKirby/test-internet"
-    },
-    {
-      "id": "sales-stock-board", "archived": true, "name": "sales-stock-board",
-      "summary": "公開 URL なし。", "repo": "KeisukeKirby/sales-stock-board"
-    },
-    {
-      "id": "shimadasan", "archived": true, "name": "Shimadasan",
-      "summary": "公開 URL なし。", "repo": "KeisukeKirby/Shimadasan"
-    },
-    {
-      "id": "test", "archived": true, "name": "test",
-      "summary": "公開 URL なし。", "repo": "KeisukeKirby/test"
     }
   ]
 }

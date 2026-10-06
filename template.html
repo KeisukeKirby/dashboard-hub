@@ -494,6 +494,7 @@
       <a class="go" href="${esc(r.href || r.item.url)}" ${r.href ? "" : 'target="_blank" rel="noopener"'}>${r.go || "開く"}</a>
     </li>`).join("");
 
+    document.getElementById("archive").hidden = !archived.length;
     document.getElementById("archive-count").textContent = archived.length;
     document.getElementById("archive-rows").innerHTML = archived.map((i) => {
       const st = STATUS[i.status] || STATUS.none;
