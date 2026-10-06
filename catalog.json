@@ -1,7 +1,7 @@
 {
   "githubOwner": "KeisukeKirby",
   "watchScopes": ["barefootinc-th"],
-  "ignore": ["KeisukeKirby/dashboard-hub", "barefootinc-th/barefootinc-backroom"],
+  "ignore": ["KeisukeKirby/dashboard-hub", "barefootinc-th/dashboard-of-dashboard"],
   "pages": ["kv-after", "kv-texture", "kv-photo-matched", "kv-before", "store-3d-en", "photo-map", "kl-trip", "kl-trip-en"],
   "areas": [
     { "id": "sales", "label": "販売・在庫" },
@@ -17,7 +17,9 @@
     "lp": "LP",
     "3d": "3D",
     "map": "平面図",
-    "report": "レポート"
+    "report": "レポート",
+    "catalog": "カタログ",
+    "guide": "ガイド"
   },
   "items": [
     {
@@ -26,7 +28,7 @@
       "area": "sales", "kind": "dashboard", "country": ["TH"],
       "summary": "タイの全店舗・オンライン・イベント・委託の売上金額と点数を1〜6月で集計。VFF シューズの足数、ブランド構成、モデル別ランキング。日英切替。",
       "url": "https://sales-1st-half-26-dashboard.vercel.app",
-      "host": "vercel", "vercel": "barefootinc-th/sales-1st-half-26-dashboard",
+      "host": "vercel", "vercel": "barefootinc-th/bft-sales-dashboard",
       "repo": "KeisukeKirby/sales-1st-half-26-dashboard"
     },
     {
@@ -35,7 +37,7 @@
       "area": "sales", "kind": "dashboard", "country": ["MY"],
       "summary": "Johor Bahru 店の開業(7/17)以降を週次・月次で集計。店舗 POS と Shopee・Lazada・直販を分け、未入金は台帳で別管理。",
       "url": "https://barefoot-my-sales-dashboard.vercel.app",
-      "host": "vercel", "vercel": "barefootinc-th/barefoot-my-sales-dashboard",
+      "host": "vercel", "vercel": "barefootinc-th/malaysia-sales-dashboard",
       "repo": "KeisukeKirby/barefoot-my-sales-dashboard"
     },
     {
@@ -57,13 +59,55 @@
       "repo": "KeisukeKirby/sales-record-baanlaesuan"
     },
     {
-      "id": "vft-csv",
-      "name": "Vibram FiveFingers Thailand Sales",
-      "area": "sales", "kind": "dashboard", "country": ["TH"],
-      "summary": "CSV を画面で読み込むと、月次売上・店舗別・商品 Top 10 を表示する分析ツール。データは同梱していない。",
+      "id": "vft-csv", "archived": true, "name": "Vibram FiveFingers Thailand Sales",
+      "summary": "CSV を読み込んで月次売上を見る分析ツールだった。Vercel プロジェクト(vft-sales-analysis)が削除され、2026-10-06 時点で URL は 404。",
       "url": "https://vibram-thailand-dashboard.vercel.app",
-      "host": "vercel", "vercel": "barefootinc-th/vft-sales-analysis",
       "repo": "KeisukeKirby/vibram-thailand-dashboard"
+    },
+    {
+      "id": "edv-sales",
+      "name": "EDV 販売実績ダッシュボード",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "Endeavors(EDV)自身の小売売上を12区分で集計。税抜ベース、日本語・英語・タイ語。BFT 側の「対EDV」(卸請求)とは別物。",
+      "url": "https://edv-sales-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/edv-sales-dashboard",
+      "repo": "KeisukeKirby/edv-sales-dashboard"
+    },
+    {
+      "id": "vivo-sales",
+      "name": "Vivo Sales Dashboard",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "Vivobarefoot の販売実績を BFT / EDV で切り替えて見る。日本語・英語・タイ語。",
+      "url": "https://vivo-sales-dashboard.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/vivo-sales-dashboard",
+      "repo": "KeisukeKirby/vivo-sales-dashboard",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/PT1dnBJDgvCgAMTWMxL7bm" }]
+    },
+    {
+      "id": "store-stock",
+      "name": "VFF Stock Dashboard",
+      "area": "sales", "kind": "dashboard", "country": ["TH"],
+      "summary": "店舗在庫のダッシュボード。同じ URL の下に Business Memo(/memo)と Vivo Sales(/vivo)がある。",
+      "flag": "「VFF 在庫一覧」と役割が重なる。どちらを残すか未確認。元データの source.xlsx / source_office.xlsx が公開 URL でダウンロードできる状態",
+      "url": "https://stock-dashboard-six-umber.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/stock-dashboard",
+      "repo": "KeisukeKirby/stock-dashboard"
+    },
+    {
+      "id": "t21-event-sales",
+      "name": "Terminal 21 Asok イベント売上",
+      "area": "sales", "kind": "report", "country": ["TH"],
+      "summary": "24th Absolute The Festival of Movement(9/15〜10/4、全20日)の売上。日別・ブランド別・商品別、日英切替。社長共有用。総額 1,347,244 THB。",
+      "url": "https://claude.ai/artifact/Y5Mo2G3WvvAgodP9PV4Wga",
+      "host": "artifact", "updated": "2026-10-05"
+    },
+    {
+      "id": "kv-event-sales",
+      "name": "K Village イベント売上",
+      "area": "sales", "kind": "report", "country": ["TH"],
+      "summary": "K Village で開催したイベントの売上レポート(推定)。",
+      "url": "https://claude.ai/artifact/9tzMiWBDhdA4L5eiG7GrFS",
+      "host": "artifact", "updated": "2026-09-30"
     },
     {
       "id": "zort",
@@ -102,19 +146,48 @@
       "repo": "KeisukeKirby/my-log"
     },
     {
-      "id": "personal-dashboard",
-      "name": "My Dashboard",
-      "area": "work", "kind": "app", "country": [],
-      "summary": "目標ボード、習慣トラッカー、人生カウントダウン、旅行リスト。Supabase に保存。",
+      "id": "personal-dashboard", "archived": true, "name": "My Dashboard",
+      "summary": "目標ボード・習慣トラッカー・旅行リスト(Supabase)。Vercel プロジェクトが削除され、2026-10-06 時点で URL は 404。",
       "url": "https://personal-dashboard-kappa-eight.vercel.app",
-      "host": "vercel", "vercel": "barefootinc-th/personal-dashboard",
       "repo": "KeisukeKirby/personal-dashboard"
+    },
+    {
+      "id": "thai-learning",
+      "name": "Thai Learning Dashboard",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "タイ語学習の記録ダッシュボード(推定)。URL は stock-dashboard プロジェクト配下。",
+      "url": "https://stock-dashboard-thai-learning.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/thai-learning"
+    },
+    {
+      "id": "health-log",
+      "name": "筋トレ・健康管理ダッシュボード",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "筋トレと健康管理の記録(推定)。",
+      "url": "https://claude.ai/artifact/XJe8kJ7N4fxsQgcVZ9kQ75",
+      "host": "artifact", "updated": "2026-10-06"
+    },
+    {
+      "id": "biz-memo",
+      "name": "ビジネスメモ帳",
+      "area": "work", "kind": "app", "country": [],
+      "summary": "仕事用のメモ帳(推定)。VFF Stock Dashboard の /memo と同じものの可能性。",
+      "url": "https://claude.ai/artifact/Mx3vC5LjUjNU8FXLDpiXqK",
+      "host": "artifact", "updated": "2026-10-06"
+    },
+    {
+      "id": "training-plan",
+      "name": "理想の身体に向けたトレーニングプログラム",
+      "area": "work", "kind": "report", "country": [],
+      "summary": "トレーニング計画のまとめ(推定)。",
+      "url": "https://claude.ai/artifact/D4mUvPUUZfMPRAfvGnbRbA",
+      "host": "artifact", "updated": "2026-09-22"
     },
     {
       "id": "lingodash",
       "name": "LingoDash",
       "area": "work", "kind": "app", "country": [],
-      "summary": "語学学習の記録。復習カード、1日の目標時間、XP、学習ヒートマップ。データはブラウザ内に保存。GitHub のリポジトリは KeisukeKirby 配下に見当たらない。",
+      "summary": "英語学習の記録。復習カード、1日の目標時間、XP、学習ヒートマップ。データはブラウザ内に保存。Vercel の新しい本番 URL はログイン必須のため、ここでは開ける旧 URL を指している。",
       "url": "https://lingodash-eta.vercel.app",
       "host": "vercel", "vercel": "barefootinc-th/lingodash"
     },
@@ -173,6 +246,14 @@
       "host": "vercel", "slug": "barefootinc-backroom/p/photo-map", "updated": "2026-08-31",
       "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/WKMvuAdERPdRpzSrg3Fhou" }]
     },
+    {
+      "id": "store-artwork",
+      "name": "Barefoot 店舗アートワーク 改訂案",
+      "area": "store", "kind": "report", "country": ["TH"],
+      "summary": "店舗アートワークの改訂案(推定)。",
+      "url": "https://claude.ai/artifact/WDwAeETY7zEqVyZKMXWXre",
+      "host": "artifact", "updated": "2026-09-28"
+    },
 
     {
       "id": "t21-lp",
@@ -221,6 +302,16 @@
       "host": "vercel", "vercel": "barefootinc-th/vibram-hq-artwork-check",
       "repo": "KeisukeKirby/vibram-hq-artwork-check"
     },
+    {
+      "id": "t21-vivo-lineup",
+      "name": "T21 Asok Vivo Lineup",
+      "area": "brand", "kind": "catalog", "country": ["TH"],
+      "summary": "T21 Asok イベントの Vivobarefoot ラインアップ。20%OFF と定価、カテゴリ・性別で絞り込み、サイズ別の在庫数。",
+      "url": "https://t21-vivo-lineup.vercel.app",
+      "host": "vercel", "vercel": "barefootinc-th/t21-vivo-lineup",
+      "repo": "KeisukeKirby/t21-vivo-lineup",
+      "links": [{ "label": "元の Artifact", "url": "https://claude.ai/artifact/59ZaEuXQTALhWBJAax1c9Y" }]
+    },
 
     {
       "id": "kl-trip",
@@ -242,6 +333,30 @@
       "url": "https://currency-dashboard-six.vercel.app",
       "host": "vercel", "vercel": "barefootinc-th/currency-dashboard",
       "repo": "KeisukeKirby/currency-dashboard"
+    },
+    {
+      "id": "ai-lab",
+      "name": "Keisuke AI伴走ラボ",
+      "area": "other", "kind": "report", "country": [],
+      "summary": "AI 伴走ラボの案内ページ(推定)。",
+      "url": "https://claude.ai/artifact/LZEhJ549qorWJ2FNxisbbG",
+      "host": "artifact", "updated": "2026-10-06"
+    },
+    {
+      "id": "gear-guide",
+      "name": "Osmo Action 5 Pro × DJI Mic Mini 機材ガイド",
+      "area": "other", "kind": "guide", "country": [],
+      "summary": "撮影機材の設定ガイド(推定)。同じ名前の Artifact が2つある。",
+      "url": "https://claude.ai/artifact/91qt9enhzvdyCrFq6UpmGM",
+      "host": "artifact", "updated": "2026-09-28"
+    },
+    {
+      "id": "grand-slam",
+      "name": "Grand Slam Runners-Up 2000–2026",
+      "area": "other", "kind": "report", "country": [],
+      "summary": "テニス4大大会の準優勝者をまとめた資料(推定)。",
+      "url": "https://claude.ai/artifact/S66dPGXoajGHF6W9MbiS43",
+      "host": "artifact", "updated": "2026-09-16"
     },
 
     {
